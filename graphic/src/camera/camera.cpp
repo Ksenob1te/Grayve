@@ -24,6 +24,7 @@ void Camera::update() {
     };
 
     if (this->follow == nullptr) return;
+    this->follow->setPhi(this->phi);
     this->follow->update_position(1);
     this->setSpeed(this->follow->getSpeed());
     Vector look_at_follow = {

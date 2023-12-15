@@ -1,6 +1,7 @@
-//#include <GL/glut.h>
-//#include <GL/gl.h>
-#include <GLFW/glfw3.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
+#include "GL/glext.h"
+#include "GL/freeglut.h"
 #include "cmath"
 #include "iostream"
 #include "graphic/include/camera.h"
@@ -106,17 +107,45 @@ void init_lighting() {
     glEnable(GL_LIGHT0);
 }
 
+void glexMultisample(int msaa)
+{
+    if (msaa)
+    {
+        glEnable(GL_MULTISAMPLE);
+
+
+
+        // detect current settings
+        GLint iMultiSample = 0;
+        GLint iNumSamples = 0;
+        glGetIntegerv(GL_SAMPLE_BUFFERS, &iMultiSample);
+        glGetIntegerv(GL_SAMPLES, &iNumSamples);
+        printf("MSAA on, GL_SAMPLE_BUFFERS = %d, GL_SAMPLES = %d\n", iMultiSample, iNumSamples);
+    }
+    else
+    {
+        glDisable(GL_MULTISAMPLE);
+        printf("MSAA off\n");
+    }
+}
+
 void init() {
     auto entity = new Entity();
-    entity->setSpeed(0.003);
+    entity->setSpeed(0.005);
     globalCam.follow = entity;
     glClearColor(0, 0, 0, 1.0);
     glColor3f(1.0, 1.0, 1.0);
 
 //    init_lighting();
     glEnable(GL_DEPTH_TEST);
-    glfwWindowHint(GLFW_SAMPLES, 4);
-//    glEnable(GL_MULTISAMPLE);
+
+//    glutSetOption(GLUT_MULTISAMPLE, 8);
+//    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+//    glEnable(GL_LINE_SMOOTH);
+//    glHint(GL_LINE_SMOOTH, GL_FASTEST);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
