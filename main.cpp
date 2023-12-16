@@ -113,8 +113,6 @@ void glexMultisample(int msaa)
     {
         glEnable(GL_MULTISAMPLE);
 
-
-
         // detect current settings
         GLint iMultiSample = 0;
         GLint iNumSamples = 0;
