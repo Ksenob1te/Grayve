@@ -11,7 +11,7 @@ enum class Tile {
 };
 
 class Block {
-public:
+private:
     Tile block_type;
     Point left_bottom;
     Point right_top;
@@ -30,6 +30,9 @@ public:
     [[nodiscard]] Tile get_block_type() const {return block_type;};
     [[nodiscard]] const Point& get_left_bottom() const {return left_bottom;};
     [[nodiscard]] const Point& get_right_top() const {return right_top;};
+    [[nodiscard]] double centerX() const {return (this->right_top.getX() + this->left_bottom.getX()) / 2;}
+    [[nodiscard]] double centerZ() const {return (this->right_top.getZ() + this->left_bottom.getZ()) / 2;}
+    [[nodiscard]] double sideLength() const {return std::abs(this->right_top.getX() - this->left_bottom.getX());}
 
     void print_block() const {
         switch (block_type) {

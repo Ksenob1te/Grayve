@@ -14,7 +14,7 @@ if(NOT GLUT_FOUND)
     message(ERROR "GLUT not found!")
 endif(NOT GLUT_FOUND)
 
-find_package(glfw3 3.3 REQUIRED)
+#find_package(glfw3 3.3 REQUIRED)
 
 find_package(OpenGL REQUIRED)
 if(NOT OPENGL_FOUND)
@@ -24,10 +24,12 @@ endif(NOT OPENGL_FOUND)
 #target_link_libraries(Grayve sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
 
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
-include_directories(static/include)
+include_directories(static/include graphic/include)
+
 add_subdirectory(static)
 add_subdirectory(graphic)
+add_subdirectory(game)
+target_link_libraries(camera entity)
+target_link_libraries(game_lib entity camera chunk map draw_map)
 
-target_link_libraries(camera game)
-
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} glfw game camera draw_block)
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map)

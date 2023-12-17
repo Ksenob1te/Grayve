@@ -9,14 +9,14 @@ struct CurrentPoints {
 CurrentPoints& create_array(const Block &block, GLdouble height, GLdouble move) {
     static CurrentPoints arr;
     GLdouble x[8][3] = {
-            {block.left_bottom.getX() + move,   0,              block.left_bottom.getZ() + move},
-            {block.left_bottom.getX() + move,   height - move,  block.left_bottom.getZ() + move},
-            {block.right_top.getX() - move,     0,              block.left_bottom.getZ() + move},
-            {block.right_top.getX() - move,     height - move,  block.left_bottom.getZ() + move},
-            {block.right_top.getX() - move,     0,              block.right_top.getZ() - move},
-            {block.right_top.getX() - move,     height - move,  block.right_top.getZ() - move},
-            {block.left_bottom.getX() + move,   0,              block.right_top.getZ() - move},
-            {block.left_bottom.getX() + move,   height - move,  block.right_top.getZ() - move}
+            {block.get_left_bottom().getX() + move,   0,              block.get_left_bottom().getZ() + move},
+            {block.get_left_bottom().getX() + move,   height - move,  block.get_left_bottom().getZ() + move},
+            {block.get_right_top().getX() - move,     0,              block.get_left_bottom().getZ() + move},
+            {block.get_right_top().getX() - move,     height - move,  block.get_left_bottom().getZ() + move},
+            {block.get_right_top().getX() - move,     0,              block.get_right_top().getZ() - move},
+            {block.get_right_top().getX() - move,     height - move,  block.get_right_top().getZ() - move},
+            {block.get_left_bottom().getX() + move,   0,              block.get_right_top().getZ() - move},
+            {block.get_left_bottom().getX() + move,   height - move,  block.get_right_top().getZ() - move}
     };
     for (int i = 0; i < 8; i++)
         for (int j = 0; j < 3; j++)
@@ -35,10 +35,10 @@ void draw::draw_floor(const Block &floor_block) {
     glEnd();
     glColor3f(0, 0, 0);
     glBegin(GL_LINE_LOOP);
-    glVertex3d(floor_block.left_bottom.getX(),    0,    floor_block.left_bottom.getZ());
-    glVertex3d(floor_block.right_top.getX(),      0,    floor_block.left_bottom.getZ());
-    glVertex3d(floor_block.right_top.getX(),      0,    floor_block.right_top.getZ());
-    glVertex3d(floor_block.left_bottom.getX(),    0,    floor_block.right_top.getZ());
+    glVertex3dv(points.arr[0]);
+    glVertex3dv(points.arr[2]);
+    glVertex3dv(points.arr[4]);
+    glVertex3dv(points.arr[6]);
     glEnd();
 }
 
@@ -63,10 +63,10 @@ void draw::draw_void(const Block &void_block) {
 
     glColor3f(0, 0, 0);
     glBegin(GL_LINE_LOOP);
-    glVertex3d(void_block.left_bottom.getX(),    0,    void_block.left_bottom.getZ());
-    glVertex3d(void_block.right_top.getX(),      0,    void_block.left_bottom.getZ());
-    glVertex3d(void_block.right_top.getX(),      0,    void_block.right_top.getZ());
-    glVertex3d(void_block.left_bottom.getX(),    0,    void_block.right_top.getZ());
+    glVertex3dv(points.arr[0]);
+    glVertex3dv(points.arr[2]);
+    glVertex3dv(points.arr[4]);
+    glVertex3dv(points.arr[6]);
     glEnd();
 }
 
@@ -75,7 +75,7 @@ void draw::draw_small_wall(const Block &s_wall_block) {
     GLfloat top_color[3] = {0.85, 0.85, 0.85};
 
     glBegin(GL_QUAD_STRIP);
-    CurrentPoints &points = create_array(s_wall_block, 0.5, 0.01);
+    CurrentPoints &points = create_array(s_wall_block, 1.5, 0.01);
 
     for (int i = 0; i < 10; i++) {
         glColor3fv(i % 2 ? top_color : bottom_color);
@@ -89,7 +89,7 @@ void draw::draw_small_wall(const Block &s_wall_block) {
         glVertex3dv(points.arr[i]);
     glEnd();
 
-    points = create_array(s_wall_block, 0.5, 0);
+    points = create_array(s_wall_block, 1.5, 0);
     glColor3f(0, 0, 0);
     glBegin(GL_LINES);
     for (auto & i : points.arr)
@@ -108,7 +108,7 @@ void draw::draw_wall(const Block &wall_block) {
     GLfloat top_color[3] = {0.9, 0.9, 0.9};
 
     glBegin(GL_QUAD_STRIP);
-    CurrentPoints &points = create_array(wall_block, 5, 0.01);
+    CurrentPoints &points = create_array(wall_block, 15, 0.01);
 
     for (int i = 0; i < 10; i++) {
         glColor3fv(i % 2 ? top_color : bottom_color);
@@ -122,7 +122,7 @@ void draw::draw_wall(const Block &wall_block) {
         glVertex3dv(points.arr[i]);
     glEnd();
 
-    points = create_array(wall_block, 5, 0);
+    points = create_array(wall_block, 15, 0);
     glColor3f(0, 0, 0);
     glBegin(GL_LINES);
     for (auto & i : points.arr)
@@ -138,7 +138,7 @@ void draw::draw_wall(const Block &wall_block) {
 
 
 void draw::draw_block(const Block &block) {
-    switch (block.block_type) {
+    switch (block.get_block_type()) {
         case Tile::Void:
             draw_void(block);
             break;

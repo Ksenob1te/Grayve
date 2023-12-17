@@ -1,26 +1,31 @@
 #ifndef GRAYVE_ENTITY_H
 #define GRAYVE_ENTITY_H
 #include "cmath"
+#include "point.h"
 
 class Entity {
 protected:
-    double x, y, z;
+    Point coordinates;
+    double height;
     double phi;
     double speed;
     bool move_left, move_right, move_forward, move_backward;
 
-    void moveLeft(double interpolation);
-    void moveRight(double interpolation);
-    void moveForward(double interpolation);
-    void moveBackward(double interpolation);
+    void moveLeft();
+    void moveRight();
+    void moveForward();
+    void moveBackward();
 
 public:
-    [[nodiscard]] double getX() const {return x;}
-    [[nodiscard]] double getY() const {return y;}
-    [[nodiscard]] double getZ() const {return z;}
+    [[nodiscard]] double getX() const {return coordinates.getX();}
+    [[nodiscard]] double getY() const {return height;}
+    [[nodiscard]] double getZ() const {return coordinates.getZ();}
     [[nodiscard]] double getPhi() const {return phi;}
     [[nodiscard]] double getSpeed() const {return speed;}
-    void update_position(double interpolation);
+    [[nodiscard]] double get_interpolatedX(double interpolation) const;
+    [[nodiscard]] double get_interpolatedZ(double interpolation) const;
+    void setCoordinates(Point point);
+    void update_position();
 
     Entity* setMoveLeft(bool state) {move_left = state; return this;}
     Entity* setMoveRight(bool state) {move_right = state; return this;}
@@ -37,8 +42,8 @@ public:
     [[nodiscard]] bool isMoving() const;
 
 
-    Entity(): x(10), y(0), z(0), phi(0), speed(0),
-              move_left(false), move_right(false), move_forward(false), move_backward(false) {}
+    Entity(): coordinates(Point(10, 0)), height(0), phi(0), speed(0),
+              move_left(false), move_right(false), move_forward(false), move_backward(false) {};
 };
 
 #endif //GRAYVE_ENTITY_H

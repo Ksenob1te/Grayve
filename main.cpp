@@ -2,15 +2,11 @@
 #include <GL/gl.h>
 #include "GL/glext.h"
 #include "GL/freeglut.h"
-#include "cmath"
 #include "iostream"
-#include "graphic/include/camera.h"
-#include "chunk.h"
-#include "map.h"
-#include "graphic/include/draw_block.h"
-
-Camera globalCam;
-field::Map globalMap;
+#include "game/game.h"
+#define TICK_RATE 50
+#define TICK_TIMER (1000./TICK_RATE)
+double globalInterpolation = 0;
 
 void CalculateFrameRate()
 {
@@ -26,96 +22,53 @@ void CalculateFrameRate()
     }
 }
 
+void idleUpdateTick() {
+    static int previous_tick = 0;
+    static int lastTime = 0;
+    static int TPS = 0;
+    int current_tick = glutGet(GLUT_ELAPSED_TIME);
+    if (current_tick - previous_tick <= TICK_TIMER) {
+        globalInterpolation = ((double) current_tick - (double) previous_tick) / TICK_TIMER;
+        return;
+    }
+
+    if(current_tick - lastTime > 1000) {
+        lastTime = current_tick;
+        std::cout<< "Current TPS: " << TPS << std::endl;
+        TPS = 0;
+    }
+    static bool busy = false;
+    if (busy) return;
+    busy = true;
+    previous_tick = current_tick;
+    TPS++;
+    globalGame.update();
+    globalInterpolation = 0;
+    busy = false;
+}
+
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    globalCam.update();
-    gluLookAt(globalCam.getX(), globalCam.getY(), globalCam.getZ(),
-              globalCam.getX() + globalCam.getLookX(),
-              globalCam.getY() + globalCam.getLookY(),
-              globalCam.getZ() + globalCam.getLookZ(),
-              0.0, 1.0, 0.0);
 
-    glColor3f(1.0, 1.0, 1.0);
-    glPushMatrix();
-    glTranslatef((GLfloat) globalCam.follow->getX(), 0, (GLfloat) globalCam.follow->getZ());
-    glutSolidSphere(0.5, 30, 30);
-    glPopMatrix();
-
-    const field::Chunk &current_chunk = globalMap.get_starter();
-    for (int x = current_chunk.left_bottom.getX(); x <= current_chunk.right_top.getX(); x++) {
-        for (int z = current_chunk.left_bottom.getZ(); z <= current_chunk.right_top.getZ(); z++) {
-            draw::draw_block(globalMap.get_starter().room[z][x]);
-        }
-    }
-
-//    glBegin(GL_LINES);
-//    for (GLfloat i = -100; i <= 100; i += 1) {
-//        glVertex3f(i, 0, 100); glVertex3f(i, 0, -100);
-//        glVertex3f(100, 0, i); glVertex3f(-100, 0, i);
-//    }
-//
-//    glEnd();
+    globalGame.render(globalInterpolation);
 
     CalculateFrameRate();
-//    glutSwapBuffers();
     glFlush();
 }
 
-void special(int key, int, int) {
-    if (!globalCam.follow->isMoving()) globalCam.follow->setPhi(globalCam.getPhi());
-    switch (key) {
-        case GLUT_KEY_LEFT: globalCam.follow->setMoveLeft(true); break;
-        case GLUT_KEY_RIGHT: globalCam.follow->setMoveRight(true); break;
-        case GLUT_KEY_UP: globalCam.follow->setMoveForward(true); break;
-        case GLUT_KEY_DOWN: globalCam.follow->setMoveBackward(true); break;
-        default: break;
-    }
-    glutPostRedisplay();
-}
-
-void reset_special(int key, int, int) {
-    switch (key) {
-        case GLUT_KEY_LEFT: globalCam.follow->setMoveLeft(false); break;
-        case GLUT_KEY_RIGHT: globalCam.follow->setMoveRight(false); break;
-        case GLUT_KEY_UP: globalCam.follow->setMoveForward(false); break;
-        case GLUT_KEY_DOWN: globalCam.follow->setMoveBackward(false); break;
-        default: break;
-    }
-}
-
-void init_lighting() {
-    GLfloat black[] = { 0.0, 0.0, 0.0, 1.0 };
-    GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
-    GLfloat cyan[] = { 0.0, 1.0, 1.0, 1.0 };
-    GLfloat white[] = { 1.0, 1.0, 1.0, 1.0 };
-    GLfloat direction[] = { 1.0, 1.0, 1.0, 0.0 };
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, cyan);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-    glMaterialf(GL_FRONT, GL_SHININESS, 30);
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, black);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, yellow);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
-    glLightfv(GL_LIGHT0, GL_POSITION, direction);
-
-    glEnable(GL_LIGHTING);                // so the renderer considers light
-    glEnable(GL_LIGHT0);
-}
-
-void glexMultisample(int msaa)
+void enableMultisample(int msaa)
 {
     if (msaa)
     {
         glEnable(GL_MULTISAMPLE);
+        glHint(GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
 
         // detect current settings
-        GLint iMultiSample = 0;
-        GLint iNumSamples = 0;
+        GLint iMultiSample = 5;
+        GLint iNumSamples = 5;
         glGetIntegerv(GL_SAMPLE_BUFFERS, &iMultiSample);
         glGetIntegerv(GL_SAMPLES, &iNumSamples);
         printf("MSAA on, GL_SAMPLE_BUFFERS = %d, GL_SAMPLES = %d\n", iMultiSample, iNumSamples);
@@ -128,22 +81,13 @@ void glexMultisample(int msaa)
 }
 
 void init() {
-    auto entity = new Entity();
-    entity->setSpeed(0.005);
-    globalCam.follow = entity;
     glClearColor(0, 0, 0, 1.0);
     glColor3f(1.0, 1.0, 1.0);
 
-//    init_lighting();
     glEnable(GL_DEPTH_TEST);
 
-//    glutSetOption(GLUT_MULTISAMPLE, 8);
-//    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-//    glEnable(GL_LINE_SMOOTH);
-//    glHint(GL_LINE_SMOOTH, GL_FASTEST);
+    glutSetOption(GLUT_MULTISAMPLE, 8);
+    enableMultisample(1);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -151,22 +95,28 @@ void init() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-//    gluLookAt(2, 3, 2, 0, 0, 0, 0, 1, 0);
 }
 
 int main(int argc, char** argv) {
-    globalMap = field::Map(10);
-    globalMap.generate_room_map(15);
-    globalMap.print_map();
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
     glutInitWindowPosition(80, 80);
     glutInitWindowSize(1280, 720);
     glutCreateWindow("A Simple Tetrahedron");
+
+    glutMotionFunc(controller::mouseMotion);
+    glutPassiveMotionFunc(controller::mouseMotion);
+    glutSetCursor(GLUT_CURSOR_NONE);
+    glutWarpPointer(640, 360);
+
     glutDisplayFunc(display);
-    glutSpecialFunc(special);
-    glutSpecialUpFunc(reset_special);
-//    timer(0);
+    glutIdleFunc(idleUpdateTick);
+
+    glutSpecialFunc(controller::specialKeyAction);
+    glutSpecialUpFunc(controller::specialKeyReset);
+    glutKeyboardFunc(controller::normalKeyAction);
+    glutKeyboardUpFunc(controller::normalKeyReset);
+
     init();
     glutMainLoop();
 }
