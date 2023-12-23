@@ -1,39 +1,59 @@
 #include "entity.h"
 
+void Entity::update_position(field::Map &map) {
+    double dx = 0, dz = 0;
+    if (this->move_forward) {
+        dx += cos(this->phi) * this->speed;
+        dz += sin(this->phi) * this->speed;
+    }
+    if (this->move_backward) {
+        dx -= cos(this->phi) * this->speed;
+        dz -= sin(this->phi) * this->speed;
+    }
+    if (this->move_left) {
+        dx -= (cos(this->phi + M_PI_2) * this->speed);
+        dz -= (sin(this->phi + M_PI_2) * this->speed);
+    }
+    if (this->move_right) {
+        dx -= (cos(this->phi - M_PI_2) * this->speed);
+        dz -= (sin(this->phi - M_PI_2) * this->speed);
+    }
+    if (dx == 0 && dz == 0) return;
+    double current_x = this->coordinates.getX();
+    double current_z = this->coordinates.getZ();
+    double dest_x = current_x + dx;
+    double dest_z = current_z + dz;
+    const field::Chunk &current_chunk = map.get_starter();
+    const Block blocks[8] = {current_chunk.get_block(current_x + 1, current_z),
+                             current_chunk.get_block(current_x, current_z + 1),
+                             current_chunk.get_block(current_x - 1, current_z),
+                             current_chunk.get_block(current_x, current_z - 1),
+                             current_chunk.get_block(current_x + 1, current_z + 1),
+                             current_chunk.get_block(current_x + 1, current_z - 1),
+                             current_chunk.get_block(current_x - 1, current_z + 1),
+                             current_chunk.get_block(current_x - 1, current_z - 1)};
+//    Block& block = map.get_starter().get_block(dest_x, dest_z);
+    this->lock_dx = false;
+    this->coordinates.setX(dest_x);
+    bool intersect_x = false;
+    for (auto i: blocks) {
+        intersect_x += this->collider.is_intersect(i);
+    }
+    if (intersect_x) {
+        this->coordinates.setX(current_x);
+        this->lock_dx = true;
+    }
 
-void Entity::moveForward() {
-    double look_x = cos(this->phi);
-    double look_z = sin(this->phi);
-    this->coordinates.setX(this->coordinates.getX() + (look_x * this->speed));
-    this->coordinates.setZ(this->coordinates.getZ() + (look_z * this->speed));
-}
-
-void Entity::moveBackward() {
-    double look_x = cos(this->phi);
-    double look_z = sin(this->phi);
-    this->coordinates.setX(this->coordinates.getX() - (look_x * this->speed));
-    this->coordinates.setZ(this->coordinates.getZ() - (look_z * this->speed));
-}
-
-void Entity::moveLeft() {
-    double look_x = cos(this->phi + M_PI_2);
-    double look_z = sin(this->phi + M_PI_2);
-    this->coordinates.setX(this->coordinates.getX() - (look_x * this->speed));
-    this->coordinates.setZ(this->coordinates.getZ() - (look_z * this->speed));
-}
-
-void Entity::moveRight() {
-    double look_x = cos(this->phi - M_PI_2);
-    double look_z = sin(this->phi - M_PI_2);
-    this->coordinates.setX(this->coordinates.getX() - (look_x * this->speed));
-    this->coordinates.setZ(this->coordinates.getZ() - (look_z * this->speed));
-}
-
-void Entity::update_position() {
-    if (this->move_forward) this->moveForward();
-    if (this->move_backward) this->moveBackward();
-    if (this->move_left) this->moveLeft();
-    if (this->move_right) this->moveRight();
+    this->coordinates.setZ(dest_z);
+    this->lock_dz = false;
+    bool intersect_z = false;
+    for (auto i: blocks) {
+        intersect_z += this->collider.is_intersect(i);
+    }
+    if (intersect_z) {
+        this->coordinates.setZ(current_z);
+        this->lock_dz = true;
+    }
 }
 
 bool Entity::isMoving() const {
@@ -42,10 +62,13 @@ bool Entity::isMoving() const {
 
 void Entity::setCoordinates(Point point) {
     this->coordinates = point;
+    this->collider.set_center(&(this->coordinates));
+    this->collider.set_radius(0.25);
 }
 
 double Entity::get_interpolatedX(double interpolation) const {
     if (!this->isMoving()) return this->coordinates.getX();
+    if (this->lock_dx) return this->coordinates.getX();
     double dx = 0;
     if (move_forward)
         dx += cos(this->phi) * this->speed * interpolation;
@@ -60,6 +83,7 @@ double Entity::get_interpolatedX(double interpolation) const {
 
 double Entity::get_interpolatedZ(double interpolation) const {
     if (!this->isMoving()) return this->coordinates.getZ();
+    if (this->lock_dz) return this->coordinates.getZ();
     double dz = 0;
     if (move_forward)
         dz += sin(this->phi) * this->speed * interpolation;

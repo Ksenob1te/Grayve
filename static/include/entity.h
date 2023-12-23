@@ -2,6 +2,8 @@
 #define GRAYVE_ENTITY_H
 #include "cmath"
 #include "point.h"
+#include "collider.h"
+#include "map.h"
 
 class Entity {
 protected:
@@ -10,11 +12,8 @@ protected:
     double phi;
     double speed;
     bool move_left, move_right, move_forward, move_backward;
-
-    void moveLeft();
-    void moveRight();
-    void moveForward();
-    void moveBackward();
+    ColliderBox collider;
+    bool lock_dx, lock_dz;
 
 public:
     [[nodiscard]] double getX() const {return coordinates.getX();}
@@ -25,7 +24,8 @@ public:
     [[nodiscard]] double get_interpolatedX(double interpolation) const;
     [[nodiscard]] double get_interpolatedZ(double interpolation) const;
     void setCoordinates(Point point);
-    void update_position();
+    void setHeight(double new_height) {this->height = new_height;};
+    void update_position(field::Map &map);
 
     Entity* setMoveLeft(bool state) {move_left = state; return this;}
     Entity* setMoveRight(bool state) {move_right = state; return this;}
@@ -43,7 +43,9 @@ public:
 
 
     Entity(): coordinates(Point(10, 0)), height(0), phi(0), speed(0),
-              move_left(false), move_right(false), move_forward(false), move_backward(false) {};
+              move_left(false), move_right(false), move_forward(false), move_backward(false) {
+        this->collider = ColliderBox(&this->coordinates, 0.5);
+    };
 };
 
 #endif //GRAYVE_ENTITY_H

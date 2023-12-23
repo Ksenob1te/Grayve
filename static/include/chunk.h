@@ -20,6 +20,7 @@ namespace field {
         ~Chunk();
         void generate_room(bool north = false, bool east = false, bool south = false, bool west = false);
         void print_chunk() const;
+        Block& get_block(double x, double z) const;
     };
 
 

@@ -12,6 +12,7 @@ Game::Game(): tick_rate(20) {
 
     this->mainChar = Entity();
     this->mainChar.setCoordinates(Point(16.5, 16.5));
+    this->mainChar.setHeight(0);
     this->mainChar.setSpeed(2./20);
 
     this->globalCam.follow = &this->mainChar;
@@ -19,7 +20,7 @@ Game::Game(): tick_rate(20) {
 
 void Game::update() {
     mainChar.setPhi(globalCam.getPhi());
-    mainChar.update_position();
+    mainChar.update_position(globalMap);
 }
 
 void Game::render(double interpolation) {
@@ -32,7 +33,7 @@ void Game::render(double interpolation) {
     glPushMatrix();
     glTranslated(
             globalCam.follow->get_interpolatedX(interpolation),
-            0,
+            globalCam.follow->getY(),
             globalCam.follow->get_interpolatedZ(interpolation)
             );
     glutSolidSphere(0.3, 30, 30);

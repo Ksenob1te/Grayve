@@ -126,3 +126,12 @@ field::Chunk::~Chunk() {
         delete[] this->room[i];
     delete[] this->room;
 }
+
+Block &field::Chunk::get_block(double x, double z) const {
+    int floor_x = floor(x);
+    int floor_z = floor(z);
+    if (floor_x < 0 || floor_x >= CHUNK_SIZE) return this->room[0][0];
+    if (floor_z < 0 || floor_z >= CHUNK_SIZE) return this->room[0][0];
+    Block &block = this->room[floor_x][floor_z];
+    return block;
+}
