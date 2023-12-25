@@ -95,3 +95,16 @@ double Entity::get_interpolatedZ(double interpolation) const {
         dz -= sin(this->phi + M_PI_2) * this->speed * interpolation;
     return this->coordinates.getZ() + dz;
 }
+
+void Entity::update(){
+    this->update_position(*this->map);
+}
+Entity::~Entity(){
+    this->map->remove_entity(this);
+};
+
+Entity::Entity(field::Map *map) : map(map){
+    this->collider = ColliderBox(&this->coordinates, 0.5);
+    if(map)
+        map->add_entity(this);
+};
