@@ -114,3 +114,17 @@ const field::Chunk& field::Map::get_chunk(int x, int y) const {
 const field::Chunk& field::Map::get_starter() const {
     return get_chunk(this->starter_x, this->starter_y);
 }
+
+void field::Map::update() {
+    for(auto& entity : this->entity_set)
+        entity->update();
+}
+
+void field::Map::add_entity(Entity *entity) {
+    if(entity)
+        this->entity_set.insert(entity);
+}
+
+void field::Map::remove_entity(Entity *entity) {
+    this->entity_set.erase(entity);
+}

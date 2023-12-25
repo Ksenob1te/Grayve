@@ -4,6 +4,9 @@
 #include "point.h"
 #include "collider.h"
 #include "map.h"
+namespace field {
+    class Map;
+};
 
 class Entity {
 protected:
@@ -14,6 +17,7 @@ protected:
     bool move_left, move_right, move_forward, move_backward;
     ColliderBox collider;
     bool lock_dx, lock_dz;
+    field::Map *map;
 
 public:
     [[nodiscard]] double getX() const {return coordinates.getX();}
@@ -26,6 +30,7 @@ public:
     void setCoordinates(Point point);
     void setHeight(double new_height) {this->height = new_height;};
     void update_position(field::Map &map);
+    virtual void update();
 
     Entity* setMoveLeft(bool state) {move_left = state; return this;}
     Entity* setMoveRight(bool state) {move_right = state; return this;}
@@ -41,11 +46,9 @@ public:
 
     [[nodiscard]] bool isMoving() const;
 
-
-    Entity(): coordinates(Point(10, 0)), height(0), phi(0), speed(0),
-              move_left(false), move_right(false), move_forward(false), move_backward(false) {
-        this->collider = ColliderBox(&this->coordinates, 0.5);
-    };
+    Entity(): Entity(nullptr) {};
+    Entity(field::Map *map);
+    ~Entity();
 };
 
 #endif //GRAYVE_ENTITY_H

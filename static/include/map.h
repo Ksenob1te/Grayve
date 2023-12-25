@@ -4,6 +4,10 @@
 #include "random"
 #include "vector"
 #include "chunk.h"
+#include "entity.h"
+#include <set>
+
+class Entity;
 
 namespace field {
     struct Chunk_Connector {
@@ -18,6 +22,7 @@ namespace field {
     class Map {
     private:
         std::vector<std::vector<Chunk_Connector>> rooms;
+        std::set<Entity*> entity_set;
         int map_size;
         int starter_x, starter_y;
     public:
@@ -35,6 +40,9 @@ namespace field {
         void print_starter() const;
         void print_chunk(int x, int y) const;
         void print_map() const;
+        void update();
+        void add_entity(Entity *entity);
+        void remove_entity(Entity *entity);
     };
 }
 
