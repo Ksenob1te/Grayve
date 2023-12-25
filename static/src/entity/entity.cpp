@@ -108,3 +108,7 @@ Entity::Entity(field::Map *map) : map(map){
     if(map)
         map->add_entity(this);
 };
+
+ColliderBox& Entity::get_collider(){
+    return this->collider;
+}

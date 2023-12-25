@@ -32,7 +32,7 @@ void Game::render(double interpolation) {
     glPushMatrix();
     glTranslated(
             globalCam.follow->get_interpolatedX(interpolation),
-            globalCam.follow->getY(),
+            globalCam.follow->getY() + 0.3,
             globalCam.follow->get_interpolatedZ(interpolation)
             );
     glutSolidSphere(0.3, 30, 30);

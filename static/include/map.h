@@ -22,10 +22,10 @@ namespace field {
     class Map {
     private:
         std::vector<std::vector<Chunk_Connector>> rooms;
-        std::set<Entity*> entity_set;
         int map_size;
         int starter_x, starter_y;
     public:
+        std::set<Entity*> entity_set;
         Map();
         explicit Map(int map_size);
         ~Map();

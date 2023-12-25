@@ -6,9 +6,10 @@ class Character: public Entity {
 private:
     int health_points;
 public:
-    virtual void die() {};
-    virtual void deal_damage(Character&) {};
-    virtual void recieve_damage(int amount) {};
+    virtual void die() = 0;
+    virtual void deal_damage(Character&) = 0;
+    virtual void recieve_damage(int amount) = 0;
+    void shoot();
     Character() : Character(nullptr, 0) {};
     explicit Character(int health_points) : Character(nullptr, health_points) {};
     explicit Character(field::Map *map) : Character(map, 0) {};

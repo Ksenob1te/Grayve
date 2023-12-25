@@ -8,6 +8,12 @@ namespace field {
     class Map;
 };
 
+enum class EntityType {
+    DEFAULT,
+    PLAYER,
+    ENEMY,
+    PROJECTILE
+};
 class Entity {
 protected:
     Point coordinates;
@@ -27,15 +33,18 @@ public:
     [[nodiscard]] double getSpeed() const {return speed;}
     [[nodiscard]] double get_interpolatedX(double interpolation) const;
     [[nodiscard]] double get_interpolatedZ(double interpolation) const;
+    [[nodiscard]] virtual EntityType get_entity_type() const = 0;
     void setCoordinates(Point point);
     void setHeight(double new_height) {this->height = new_height;};
     void update_position(field::Map &map);
-    virtual void update();
+    virtual void update() = 0;
 
     Entity* setMoveLeft(bool state) {move_left = state; return this;}
     Entity* setMoveRight(bool state) {move_right = state; return this;}
     Entity* setMoveForward(bool state) {move_forward = state; return this;}
     Entity* setMoveBackward(bool state) {move_backward = state; return this;}
+
+    ColliderBox& get_collider();
 
     void setSpeed(double set_speed) {this->speed = std::abs(set_speed);}
     void setPhi(double set_phi) {
