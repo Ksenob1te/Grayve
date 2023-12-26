@@ -22,6 +22,9 @@ void Enemy::update() {
 
         if (sqrt(dx * dx + dz * dz) <= 5)
             this->shoot();
+        if (sqrt(dx * dx + dz * dz) <= 4)
+            this->setMoveForward(false);
+
     }
     Character::update();
 }
