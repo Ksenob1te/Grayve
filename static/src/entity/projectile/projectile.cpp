@@ -1,5 +1,6 @@
 #include "projectile.h"
 #include "player.h"
+#include "enemy.h"
 
 EntityType Projectile::get_entity_type() const {
     return EntityType::PROJECTILE;
@@ -35,9 +36,11 @@ void Projectile::update() {
             }
             break;
         case EntityType::ENEMY:
-//            if (this->creator_type == EntityType::PLAYER)
-//                collided->on_impact();
-            delete this;
+            if (this->creator_type == EntityType::PLAYER) {
+                Enemy *enm = static_cast<Enemy*>(collided);
+                enm->receive_damage(this->damage);
+                delete this;
+            }
             return;
         default:
             break;

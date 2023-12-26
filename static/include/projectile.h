@@ -9,7 +9,7 @@ class Projectile: public Entity {
 public:
     [[nodiscard]] EntityType get_entity_type() const override;
     Projectile(field::Map *map, double phi, Point point, EntityType creator_type)
-        : Entity(map), life_time(0), creator_type(creator_type), damage(0) {
+        : Entity(map), life_time(0), creator_type(creator_type), damage(1) {
         this->setPhi(phi);
         this->setCoordinates(point);
         this->collider.set_radius(0);

@@ -12,7 +12,7 @@ public:
     void receive_damage(int amount) override {};
     void update() override;
     void set_follow(Entity *set) {this->follow = set;}
-    explicit Enemy(field::Map *map) : Character(map) {};
+    explicit Enemy(field::Map *map) : Character(map, 5) {};
 };
 
 #endif //GRAYVE_ENEMY_H

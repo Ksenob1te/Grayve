@@ -16,7 +16,7 @@ public:
     void deal_damage(Character&) override;
     void receive_damage(int amount) override;
     void update() override;
-    explicit Player(field::Map *map) : Character(map) {};
+    explicit Player(field::Map *map) : Character(map, 100) {};
 
     void set_shoot_action(bool state) {this->shoot_action = state;}
     void set_sprint(bool state) {this->sprint_action = state;}
