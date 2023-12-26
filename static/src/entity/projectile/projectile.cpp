@@ -28,8 +28,11 @@ void Projectile::update() {
             delete this;
             return;
         case EntityType::PLAYER:
-//            if (this->creator_type == EntityType::ENEMY)
-//                collided->on_impact();
+            if (this->creator_type == EntityType::ENEMY) {
+                Player *plr = static_cast<Player*>(collided);
+                plr->receive_damage(this->damage);
+                delete this;
+            }
             break;
         case EntityType::ENEMY:
 //            if (this->creator_type == EntityType::PLAYER)
