@@ -5,7 +5,6 @@
 #include "vector.h"
 #include "chunk.h"
 #include "entity.h"
-#include <set>
 
 class Entity;
 
