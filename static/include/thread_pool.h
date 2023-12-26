@@ -18,10 +18,11 @@ private:
     void ThreadLoop();
 
     bool should_terminate = false;           
-    std::mutex queue_mutex;                  
+    std::mutex queue_mutex;
+    std::mutex vector_mutex;                  
     std::condition_variable mutex_condition; 
     std::vector<std::thread> threads;
-    std::queue<std::function<void()>> jobs;
+    std::queue<std::function<T()>> jobs;
 };
 
 template<typename T>
@@ -49,7 +50,7 @@ void ThreadPool<T>::ThreadLoop() {
         }
         T value = job();
         {
-            std::unique_lock<std::mutex> lock(return_values);
+            std::unique_lock<std::mutex> lock(vector_mutex);
             return_values.push_back(value);
         }
     }
