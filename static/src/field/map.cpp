@@ -1,16 +1,19 @@
-#include <ctime>
 #include <map.h>
 #include "iostream"
 #include "random"
 
 field::Map::Map(int map_size) {
+    this->starter_x = 0;
+    this->starter_y = 0;
     this->map_size = map_size;
-    this->rooms = std::vector<std::vector<field::Chunk_Connector>>(map_size);
+    this->rooms = tmp::Vector<tmp::Vector<field::Chunk_Connector>>(map_size);
 }
 
 field::Map::Map() {
+    this->starter_x = 0;
+    this->starter_y = 0;
     this->map_size = 0;
-    this->rooms = std::vector<std::vector<field::Chunk_Connector>>(map_size);
+    this->rooms = tmp::Vector<tmp::Vector<field::Chunk_Connector>>(map_size);
 }
 
 field::Map::~Map() = default;
@@ -76,7 +79,8 @@ void field::Map::generate_room_map(int numRooms) {
                 this->rooms[y].push_back(current_connector);
             }
         }
-    }}
+    }
+}
 
 void field::Map::print_chunk(int x, int y) const {
     get_chunk(x, y).print_chunk();
@@ -95,7 +99,7 @@ void field::Map::print_map() const {
         int current_tag = 0;
         std::cout << y;
         for (int x = 0; x < this->map_size; ++x) {
-            if (this->rooms[y].size() > current_tag && this->rooms[y][current_tag].x == x) {
+            if (this->rooms[y].get_size() > current_tag && this->rooms[y][current_tag].x == x) {
                 std::cout << "1 ";
                 current_tag++;
             } else
@@ -116,8 +120,14 @@ const field::Chunk& field::Map::get_starter() const {
 }
 
 void field::Map::update() {
-    for(auto& entity : this->entity_set)
-        entity->update();
+//    std::cout << this->entity_set.size() << std::endl;
+    Entity* array[this->entity_set.size()];
+    int current_iterator = 0;
+    for (auto itr : this->entity_set)
+        array[current_iterator++] = itr;
+
+    for (auto itr : array)
+        itr->update();
 }
 
 void field::Map::add_entity(Entity *entity) {

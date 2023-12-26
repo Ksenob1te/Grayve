@@ -3,18 +3,21 @@
 #include "entity.h"
 
 class Projectile: public Entity {
-    int update_count;
+    int life_time;
     int damage;
     EntityType creator_type;
 public:
-    [[nodiscard]] virtual EntityType get_entity_type() const;
-    Projectile(field::Map *map, double phi, Point point, EntityType creator_type) : Entity(map), update_count(0), creator_type(creator_type){
+    [[nodiscard]] EntityType get_entity_type() const override;
+    Projectile(field::Map *map, double phi, Point point, EntityType creator_type)
+        : Entity(map), life_time(0), creator_type(creator_type), damage(0) {
         this->setPhi(phi);
         this->setCoordinates(point);
+        this->collider.set_radius(0);
         this->setMoveForward(true);
-        this->setSpeed(4./20);
+        this->setSpeed(8./20);
     }
-    Projectile(field::Map *map) : Projectile(map, 0, Point(0, 0), EntityType::DEFAULT) {}
+    explicit Projectile(field::Map *map) : Projectile(map, 0, Point(0, 0), EntityType::DEFAULT) {}
+
     void update() override;
 };
 

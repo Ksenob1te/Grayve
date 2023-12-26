@@ -70,6 +70,39 @@ void draw::draw_void(const Block &void_block) {
     glEnd();
 }
 
+void draw::draw_tiny_wall(const Block &t_wall_block) {
+    GLfloat bottom_color[3] = {0.8, 0.8, 0.8};
+    GLfloat top_color[3] = {0.85, 0.85, 0.85};
+
+    glBegin(GL_QUAD_STRIP);
+    CurrentPoints &points = create_array(t_wall_block, 0.6, 0.01);
+
+    for (int i = 0; i < 10; i++) {
+        glColor3fv(i % 2 ? top_color : bottom_color);
+        glVertex3dv(points.arr[i % 8]);
+    }
+    glEnd();
+
+    glColor3fv(top_color);
+    glBegin(GL_QUADS);
+    for (int i = 1; i < 8; i+= 2)
+        glVertex3dv(points.arr[i]);
+    glEnd();
+
+    points = create_array(t_wall_block, 0.6, 0);
+    glColor3f(0, 0, 0);
+    glBegin(GL_LINES);
+    for (auto & i : points.arr)
+        glVertex3dv(i);
+    glEnd();
+
+    glColor3f(0, 0, 0);
+    glBegin(GL_LINE_LOOP);
+    for (int i = 1; i < 8; i+= 2)
+        glVertex3dv(points.arr[i]);
+    glEnd();
+}
+
 void draw::draw_small_wall(const Block &s_wall_block) {
     GLfloat bottom_color[3] = {0.8, 0.8, 0.8};
     GLfloat top_color[3] = {0.85, 0.85, 0.85};
@@ -140,7 +173,7 @@ void draw::draw_wall(const Block &wall_block) {
 void draw::draw_block(const Block &block) {
     switch (block.get_block_type()) {
         case Tile::Void:
-            draw_void(block);
+            draw_tiny_wall(block);
             break;
         case Tile::Floor:
             draw_floor(block);

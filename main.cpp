@@ -116,15 +116,16 @@ int main(int argc, char** argv) {
     glutSpecialUpFunc(controller::specialKeyReset);
     glutKeyboardFunc(controller::normalKeyAction);
     glutKeyboardUpFunc(controller::normalKeyReset);
+    glutMouseFunc(controller::mouseEvent);
 
     init();
     glutMainLoop();
 }
 
-//    auto *map = new field::Map(19, 7);
-//    map->generate_dungeon();
-//    map->print_map();
-//    map->print_dungeon();
+//    auto *globalMap = new field::Map(19, 7);
+//    globalMap->generate_dungeon();
+//    globalMap->print_map();
+//    globalMap->print_dungeon();
 //    int x;
 //    std::cin >> x;
 //    return 0;

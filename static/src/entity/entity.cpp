@@ -1,6 +1,7 @@
 #include "entity.h"
 
-void Entity::update_position(field::Map &map) {
+void Entity::update_position() {
+    if (!this->isMoving()) return;
     double dx = 0, dz = 0;
     if (this->move_forward) {
         dx += cos(this->phi) * this->speed;
@@ -19,41 +20,48 @@ void Entity::update_position(field::Map &map) {
         dz -= (sin(this->phi - M_PI_2) * this->speed);
     }
     if (dx == 0 && dz == 0) return;
+
     double current_x = this->coordinates.getX();
     double current_z = this->coordinates.getZ();
     double dest_x = current_x + dx;
     double dest_z = current_z + dz;
-    const field::Chunk &current_chunk = map.get_starter();
-    const Block blocks[8] = {current_chunk.get_block(current_x + 1, current_z),
+
+    if (!this->is_wall_colliding(dest_x, current_z)) {
+        this->lock_dx = false;
+        this->coordinates.setX(dest_x);
+    } else
+        this->lock_dx = true;
+
+
+    if (!this->is_wall_colliding(current_x, dest_z)) {
+        this->lock_dz = false;
+        this->coordinates.setZ(dest_z);
+    } else
+        this->lock_dz = true;
+}
+
+bool Entity::is_wall_colliding(double dest_x, double dest_z) {
+    double current_x = this->coordinates.getX();
+    double current_z = this->coordinates.getZ();
+    const field::Chunk &current_chunk = this->globalMap->get_starter();
+    const Block blocks[9] = {current_chunk.get_block(current_x + 1, current_z),
                              current_chunk.get_block(current_x, current_z + 1),
                              current_chunk.get_block(current_x - 1, current_z),
                              current_chunk.get_block(current_x, current_z - 1),
                              current_chunk.get_block(current_x + 1, current_z + 1),
                              current_chunk.get_block(current_x + 1, current_z - 1),
                              current_chunk.get_block(current_x - 1, current_z + 1),
-                             current_chunk.get_block(current_x - 1, current_z - 1)};
-//    Block& block = map.get_starter().get_block(dest_x, dest_z);
-    this->lock_dx = false;
-    this->coordinates.setX(dest_x);
-    bool intersect_x = false;
-    for (auto i: blocks) {
-        intersect_x += this->collider.is_intersect(i);
-    }
-    if (intersect_x) {
-        this->coordinates.setX(current_x);
-        this->lock_dx = true;
-    }
+                             current_chunk.get_block(current_x - 1, current_z - 1),
+                             current_chunk.get_block(current_x, current_z)};
 
+    this->coordinates.setX(dest_x);
     this->coordinates.setZ(dest_z);
-    this->lock_dz = false;
-    bool intersect_z = false;
-    for (auto i: blocks) {
-        intersect_z += this->collider.is_intersect(i);
-    }
-    if (intersect_z) {
-        this->coordinates.setZ(current_z);
-        this->lock_dz = true;
-    }
+    bool intersect = false;
+    for (auto i: blocks)
+        intersect += this->collider.is_intersect(i);
+    this->coordinates.setX(current_x);
+    this->coordinates.setZ(current_z);
+    return intersect;
 }
 
 bool Entity::isMoving() const {
@@ -96,19 +104,20 @@ double Entity::get_interpolatedZ(double interpolation) const {
     return this->coordinates.getZ() + dz;
 }
 
-void Entity::update(){
-    this->update_position(*this->map);
+void Entity::update() {
+    this->update_position();
 }
-Entity::~Entity(){
-    this->map->remove_entity(this);
-};
 
-Entity::Entity(field::Map *map) : map(map){
+Entity::~Entity() {
+    this->globalMap->remove_entity(this);
+}
+
+Entity::Entity(field::Map *map) : globalMap(map) {
     this->collider = ColliderBox(&this->coordinates, 0.5);
-    if(map)
+    if (map)
         map->add_entity(this);
-};
+}
 
-ColliderBox& Entity::get_collider(){
+ColliderBox &Entity::get_collider() {
     return this->collider;
 }

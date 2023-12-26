@@ -6,29 +6,35 @@ EntityType Projectile::get_entity_type() const {
 }
 
 void Projectile::update() {
-    this->update_position(*this->map);
-    this->update_count++;
-    if(this->update_count > 1000){
-        
+    this->update_position();
+    this->life_time++;
+    if (this->life_time > 100 || this->lock_dx || this->lock_dz) {
+        delete this;
+        return;
     }
-    Entity *collided;
-    for (auto *entity : this->map->entity_set)
-        if(this->collider.is_intersect(entity->get_collider())){
+    Entity *collided = nullptr;
+    for (auto *entity: this->globalMap->entity_set) {
+        if (this == entity) continue;
+        if (this->collider.is_intersect(entity->get_collider())) {
             collided = entity;
             break;
         }
-    switch (collided->get_entity_type())
-    {
-    case EntityType::PROJECTILE:
-        
-        break;
-    case EntityType::PLAYER:
-        
-        break;
-    case EntityType::ENEMY:
+    }
+    if (collided == nullptr) return;
 
-        break;
-    default:
-        break;
+    switch (collided->get_entity_type()) {
+        case EntityType::PROJECTILE:
+            delete collided;
+            delete this;
+            return;
+        case EntityType::PLAYER:
+
+            break;
+        case EntityType::ENEMY:
+            printf("COLLIDED\n");
+            delete this;
+            return;
+        default:
+            break;
     }
 }

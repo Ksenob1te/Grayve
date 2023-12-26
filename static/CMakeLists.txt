@@ -8,4 +8,4 @@ add_subdirectory(src/entity)
 #target_include_directories(game PUBLIC src/field)
 
 
-#target_link_libraries(game entity chunk map)
+#target_link_libraries(game entity chunk globalMap)

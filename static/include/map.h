@@ -2,7 +2,7 @@
 #define GRAYVE_MAP_H
 
 #include "random"
-#include "vector"
+#include "vector.h"
 #include "chunk.h"
 #include "entity.h"
 #include <set>
@@ -21,11 +21,12 @@ namespace field {
 
     class Map {
     private:
-        std::vector<std::vector<Chunk_Connector>> rooms;
+        tmp::Vector<tmp::Vector<Chunk_Connector>> rooms;
         int map_size;
         int starter_x, starter_y;
     public:
-        std::set<Entity*> entity_set;
+        std::set<Entity *> entity_set;
+
         Map();
         explicit Map(int map_size);
         ~Map();

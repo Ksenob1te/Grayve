@@ -15,6 +15,11 @@ Game::Game() {
     this->mainChar->setHeight(0);
     this->mainChar->setSpeed(2./20);
 
+    auto enemy = new Enemy(&this->globalMap);
+    enemy->setCoordinates(Point(10.5, 10.5));
+    enemy->setSpeed(0.05);
+    enemy->set_follow(this->mainChar);
+
     this->globalCam.follow = this->mainChar;
 }
 
@@ -26,16 +31,17 @@ void Game::render(double interpolation) {
     controller::globalController.process_player(*mainChar);
     controller::globalController.process_camera(globalCam);
     globalCam.update(interpolation);
+    draw::draw_entities(globalMap, interpolation);
 //    std::cout << interpolation << std::endl;
 
-    glColor3f(1.0, 1.0, 1.0);
-    glPushMatrix();
-    glTranslated(
-            globalCam.follow->get_interpolatedX(interpolation),
-            globalCam.follow->getY() + 0.3,
-            globalCam.follow->get_interpolatedZ(interpolation)
-            );
-    glutSolidSphere(0.3, 30, 30);
-    glPopMatrix();
+//    glColor3f(1.0, 1.0, 1.0);
+//    glPushMatrix();
+//    glTranslated(
+//            globalCam.follow->get_interpolatedX(interpolation),
+//            globalCam.follow->getY() + 0.3,
+//            globalCam.follow->get_interpolatedZ(interpolation)
+//            );
+//    glutSolidSphere(0.3, 30, 30);
+//    glPopMatrix();
     draw::draw_map(globalMap);
 }

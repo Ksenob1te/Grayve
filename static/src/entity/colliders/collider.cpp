@@ -2,7 +2,7 @@
 #include "cmath"
 
 bool ColliderBox::is_intersect(const Block &other) {
-    if (other.get_block_type() != Tile::Wall && other.get_block_type() != Tile::Small_Wall) return false;
+    if (other.get_block_type() != Tile::Wall && other.get_block_type() != Tile::Small_Wall && other.get_block_type() != Tile::Void) return false;
     double closestX = std::max(other.get_left_bottom().getX(), std::min(this->center->getX(), other.get_right_top().getX()));
     double closestZ = std::max(other.get_left_bottom().getZ(), std::min(this->center->getZ(), other.get_right_top().getZ()));
 

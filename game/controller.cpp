@@ -4,8 +4,21 @@ namespace controller {
     Controller globalController = Controller();
 
     void mouseMotion(int x, int y) {
+        if (glutGetModifiers() == GLUT_ACTIVE_SHIFT)
+            globalController.pressed_shift = true;
+        
         globalController.mouseDeltaX = x - 640;
         globalController.mouseDeltaZ = y - 360;
+    }
+
+    void idleFunc() {}
+
+    void mouseEvent(int button, int state, int, int) {
+        if (button == GLUT_LEFT_BUTTON)
+            globalController.pressed_lb = (state == GLUT_DOWN);
+
+        else if (button == GLUT_RIGHT_BUTTON)
+            globalController.pressed_rb = (state == GLUT_DOWN);
     }
 
     void specialKeyAction(int key, int, int) {
@@ -84,11 +97,16 @@ namespace controller {
         }
     }
 
-    void Controller::process_player(Entity &player) const {
+    void Controller::process_player(Player &player) {
         player.setMoveForward(this->pressed_forward);
         player.setMoveLeft(this->pressed_left);
         player.setMoveBackward(this->pressed_backward);
         player.setMoveRight(this->pressed_right);
+        player.set_shoot_action(this->pressed_lb);
+        if (this->pressed_shift) {
+            player.set_sprint(this->pressed_shift);
+            this->pressed_shift = false;
+        }
     }
 
     void Controller::process_camera(Camera &camera) {
