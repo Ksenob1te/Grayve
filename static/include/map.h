@@ -26,6 +26,7 @@ namespace field {
         int starter_x, starter_y;
     public:
         std::vector<Entity *> entity_set;
+        std::vector<Entity *> new_entity;
 
         Map();
         explicit Map(int map_size);

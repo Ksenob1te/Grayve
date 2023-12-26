@@ -1,7 +1,7 @@
 #ifndef GRAYVE_CHARACTER_H
 #define GRAYVE_CHARACTER_H
 #include "entity.h"
-#define SHOOT_COOLDOWN 15
+#define SHOOT_COOLDOWN 0
 
 class Character: public Entity {
 private:

@@ -16,6 +16,7 @@ void Projectile::update() {
     Entity *collided = nullptr;
     for (auto *entity: this->globalMap->entity_set) {
         if (this == entity) continue;
+        if (entity == nullptr) continue;
         if (this->collider.is_intersect(entity->get_collider())) {
             collided = entity;
             break;
@@ -45,4 +46,8 @@ void Projectile::update() {
         default:
             break;
     }
+}
+
+Projectile::~Projectile() {
+    this->globalMap->remove_entity(this);
 }

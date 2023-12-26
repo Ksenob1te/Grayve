@@ -10,7 +10,7 @@ public:
     Cylinder(): center(nullptr), radius(0) {};
     explicit Cylinder(Point *point): center(point), radius(0) {};
     Cylinder(Point *point, double radius): center(point), radius(radius) {};
-    ~Cylinder() = default;
+    ~Cylinder() {};
 };
 
 class ColliderBox: public Cylinder {

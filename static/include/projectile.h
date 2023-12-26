@@ -12,12 +12,12 @@ public:
         : Entity(map), life_time(0), creator_type(creator_type), damage(1) {
         this->setPhi(phi);
         this->setCoordinates(point);
-        this->collider.set_radius(0);
+        this->collider.set_radius(0.1);
         this->setMoveForward(true);
         this->setSpeed(8./20);
     }
     explicit Projectile(field::Map *map) : Projectile(map, 0, Point(0, 0), EntityType::DEFAULT) {}
-
+    ~Projectile();
     void update() override;
 };
 

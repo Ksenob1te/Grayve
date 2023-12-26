@@ -121,16 +121,19 @@ const field::Chunk& field::Map::get_starter() const {
 }
 
 void field::Map::update() {
-    for (Entity *ent : this->entity_set)
-        if (ent != nullptr)
-            ent->update();
+    for (auto ent = this->entity_set.begin(); ent != this->entity_set.end(); ++ent)
+        if (*ent != nullptr)
+            (*ent)->update();
     this->entity_set.erase(std::remove_if(this->entity_set.begin(),this->entity_set.end(),
                     [](auto x){ return x == nullptr; }), this->entity_set.end());
+    for (auto &ent : this->new_entity)
+        this->entity_set.push_back(ent);
+    this->new_entity.clear();
 }
 
 void field::Map::add_entity(Entity *entity) {
     if(entity)
-        this->entity_set.push_back(entity);
+        this->new_entity.push_back(entity);
 }
 
 void field::Map::remove_entity(Entity *entity) {
