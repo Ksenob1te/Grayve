@@ -13,7 +13,6 @@ private:
 public:
     [[nodiscard]] EntityType get_entity_type() const override;
     void die() override;
-    void deal_damage(Character&) override;
     void receive_damage(int amount) override;
     void update() override;
     explicit Player(field::Map *map) : Character(map, 100) {};

@@ -13,6 +13,7 @@ namespace field {
     struct Chunk_Connector {
         Chunk room = Chunk();
         int x = 0;
+        int y = 0;
         bool connected_north = false;
         bool connected_east = false;
         bool connected_south = false;

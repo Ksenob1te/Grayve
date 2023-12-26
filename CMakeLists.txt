@@ -30,6 +30,6 @@ add_subdirectory(static)
 add_subdirectory(graphic)
 add_subdirectory(game)
 target_link_libraries(camera entity)
-target_link_libraries(game_lib entity camera chunk map draw_map draw_entity)
+target_link_libraries(game_lib entity camera chunk map draw_map draw_entity thread_pool)
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map)

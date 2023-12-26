@@ -5,7 +5,6 @@
 }
 
 void Player::die() {};
-void Player::deal_damage(Character&) {};
 void Player::receive_damage(int amount) {};
 
 void Player::update(){

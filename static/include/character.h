@@ -12,7 +12,6 @@ protected:
 
 public:
     virtual void die() = 0;
-    virtual void deal_damage(Character&) = 0;
     virtual void receive_damage(int amount) = 0;
 
     void update() override;
