@@ -21,7 +21,6 @@ public:
     explicit Character(int health_points) : Character(nullptr, health_points) {};
     explicit Character(field::Map *map) : Character(map, 0) {};
     Character(field::Map *map, int health_points) : Entity(map), health_points(health_points) {};
-    ~Character() override = default;
 
 };
 
