@@ -19,6 +19,9 @@ void Enemy::update() {
             phi = at - M_PI;
         this->setPhi(phi);
         this->setMoveForward(true);
+
+        if (sqrt(dx * dx + dz * dz) <= 5)
+            this->shoot();
     }
     Character::update();
 }

@@ -4,10 +4,13 @@
 #include "draw_player.h"
 #include "draw_enemy.h"
 
-void draw::draw_map(const field::Map &map) {
+void draw::draw_map(const field::Map &map, const Camera &camera) {
     const field::Chunk &current_chunk = map.get_starter();
     for (int x = (int) current_chunk.left_bottom.getX(); x <= current_chunk.right_top.getX(); x++) {
         for (int z = (int) current_chunk.left_bottom.getZ(); z <= current_chunk.right_top.getZ(); z++) {
+            if (current_chunk.room[z][x].get_block_type() == Tile::Wall)
+                if (camera.getCollider().is_intersect(current_chunk.room[z][x]))
+                    continue;
             draw::draw_block(current_chunk.room[z][x]);
         }
     }

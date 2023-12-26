@@ -7,5 +7,6 @@ void Character::shoot() {
 }
 
 void Character::update() {
+    if (this->shoot_cooldown) this->shoot_cooldown--;
     Entity::update();
 }

@@ -4,22 +4,27 @@
 #include "cmath"
 #include "entity.h"
 #include "GL/glut.h"
+#include "collider.h"
 
 class Camera {
 private:
     double theta, phi;
     Point coordinates;
     double height;
+    ColliderBox collider;
 
 public:
     Entity *follow;
-    Camera(): theta(2.5 * M_PI / 4), phi(0), follow(nullptr) {coordinates = Point(0, 0); height = 0;}
+    Camera(): theta(2.5 * M_PI / 4), phi(0), follow(nullptr) {
+        coordinates = Point(0, 0); collider.set_center(&coordinates); collider.set_radius(5); height = 0;
+    }
 
     [[nodiscard]] double getLookX() const {return follow->getX();}
     [[nodiscard]] double getLookY() const {return follow->getY() + 2;}
     [[nodiscard]] double getLookZ() const {return follow->getZ();}
     [[nodiscard]] double getPhi() const {return this->phi;}
     [[nodiscard]] double getTheta() const {return this->theta;}
+    [[nodiscard]] const ColliderBox& getCollider() const {return this->collider;}
     void setPhi(double set_phi) {
         while (set_phi < -M_PI) set_phi += (2 * M_PI);
         while (set_phi > M_PI) set_phi -= (2 * M_PI);

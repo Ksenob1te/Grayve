@@ -6,10 +6,10 @@
 
 void Player::die() {};
 void Player::deal_damage(Character&) {};
-void Player::recieve_damage(int amount) {};
+void Player::receive_damage(int amount) {};
 
 void Player::update(){
-    if (this->shoot_cooldown) this->shoot_cooldown--;
+
     if (this->sprint_length) this->sprint_length--;
     if (this->sprint_cooldown) this->sprint_cooldown--;
 

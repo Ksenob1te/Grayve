@@ -10,6 +10,6 @@ void draw::draw_projectile(const Entity &projectile, double interpolation) {
             projectile.getY() + 0.5,
             projectile.get_interpolatedZ(interpolation)
     );
-    glutSolidSphere(0.2, 30, 30);
+    glutSolidSphere(0.15, 30, 30);
     glPopMatrix();
 }

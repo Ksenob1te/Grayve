@@ -9,7 +9,7 @@ public:
     [[nodiscard]] EntityType get_entity_type() const override;
     void die() override {};
     void deal_damage(Character&) override {};
-    void recieve_damage(int amount) override {};
+    void receive_damage(int amount) override {};
     void update() override;
     void set_follow(Entity *set) {this->follow = set;}
     explicit Enemy(field::Map *map) : Character(map) {};

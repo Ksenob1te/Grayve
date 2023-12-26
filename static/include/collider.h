@@ -15,8 +15,8 @@ public:
 
 class ColliderBox: public Cylinder {
 public:
-    bool is_intersect(ColliderBox &other);
-    bool is_intersect(const Block &other);
+    [[nodiscard]] bool is_intersect(ColliderBox &other) const;
+    [[nodiscard]] bool is_intersect(const Block &other) const;
     ColliderBox(): Cylinder() {};
     explicit ColliderBox(Point *point): Cylinder(point) {};
     ColliderBox(Point *point, double radius): Cylinder(point, radius) {};

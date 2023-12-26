@@ -28,10 +28,12 @@ void Projectile::update() {
             delete this;
             return;
         case EntityType::PLAYER:
-
+//            if (this->creator_type == EntityType::ENEMY)
+//                collided->on_impact();
             break;
         case EntityType::ENEMY:
-            printf("COLLIDED\n");
+//            if (this->creator_type == EntityType::PLAYER)
+//                collided->on_impact();
             delete this;
             return;
         default:

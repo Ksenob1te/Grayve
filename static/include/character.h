@@ -1,15 +1,19 @@
 #ifndef GRAYVE_CHARACTER_H
 #define GRAYVE_CHARACTER_H
 #include "entity.h"
+#define SHOOT_COOLDOWN 15
 
 class Character: public Entity {
 private:
     int health_points;
 
+protected:
+    int shoot_cooldown{};
+
 public:
     virtual void die() = 0;
     virtual void deal_damage(Character&) = 0;
-    virtual void recieve_damage(int amount) = 0;
+    virtual void receive_damage(int amount) = 0;
 
     void update() override;
     void shoot();

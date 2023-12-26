@@ -126,8 +126,8 @@ void field::Map::update() {
     for (auto itr : this->entity_set)
         array[current_iterator++] = itr;
 
-    for (auto itr : array)
-        itr->update();
+    for (int i = 0; i < current_iterator; i++)
+        array[i]->update();
 }
 
 void field::Map::add_entity(Entity *entity) {

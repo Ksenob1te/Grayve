@@ -1,7 +1,7 @@
 #include "collider.h"
 #include "cmath"
 
-bool ColliderBox::is_intersect(const Block &other) {
+bool ColliderBox::is_intersect(const Block &other) const {
     if (other.get_block_type() != Tile::Wall && other.get_block_type() != Tile::Small_Wall && other.get_block_type() != Tile::Void) return false;
     double closestX = std::max(other.get_left_bottom().getX(), std::min(this->center->getX(), other.get_right_top().getX()));
     double closestZ = std::max(other.get_left_bottom().getZ(), std::min(this->center->getZ(), other.get_right_top().getZ()));
@@ -13,7 +13,7 @@ bool ColliderBox::is_intersect(const Block &other) {
     return distanceSquared <= (this->radius * this->radius);
 }
 
-bool ColliderBox::is_intersect(ColliderBox &other) {
+bool ColliderBox::is_intersect(ColliderBox &other) const {
     double distance = sqrt(pow(this->center->getX() - other.center->getX(), 2) + pow(this->center->getZ() - other.center->getZ(), 2));
     return distance <= (this->radius + other.radius);
 }
