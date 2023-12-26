@@ -1,6 +1,7 @@
 #include <map.h>
 #include "iostream"
 #include "random"
+#include <algorithm>
 
 field::Map::Map(int map_size) {
     this->starter_x = 0;
@@ -120,21 +121,20 @@ const field::Chunk& field::Map::get_starter() const {
 }
 
 void field::Map::update() {
-//    std::cout << this->entity_set.size() << std::endl;
-    Entity* array[this->entity_set.size()];
-    int current_iterator = 0;
-    for (auto itr : this->entity_set)
-        array[current_iterator++] = itr;
-
-    for (int i = 0; i < current_iterator; i++)
-        array[i]->update();
+    for (Entity *ent : this->entity_set)
+        if (ent != nullptr)
+            ent->update();
+    this->entity_set.erase(std::remove_if(this->entity_set.begin(),this->entity_set.end(),
+                    [](auto x){ return x == nullptr; }), this->entity_set.end());
 }
 
 void field::Map::add_entity(Entity *entity) {
     if(entity)
-        this->entity_set.insert(entity);
+        this->entity_set.push_back(entity);
 }
 
 void field::Map::remove_entity(Entity *entity) {
-    this->entity_set.erase(entity);
+    for (auto &ent : this->entity_set) {
+        if(ent == entity) ent = nullptr;
+    }
 }
