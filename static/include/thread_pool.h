@@ -6,23 +6,50 @@
 #include <functional>
 #include <condition_variable>
 
+/**
+ * @class ThreadPool
+ * @brief A basic thread pool implementation for managing concurrent tasks.
+ * @tparam T The return type of the tasks.
+ */
 template<typename T>
 class ThreadPool {
 public:
+    /**
+     * @brief Initializes the thread pool and starts worker threads.
+     */
     void Start();
+
+    /**
+     * @brief Queues a new job to be executed by the thread pool.
+     * @param job The job to be executed.
+     */
     void QueueJob(const std::function<T()>& job);
+
+    /**
+     * @brief Stops all worker threads and terminates the thread pool.
+     */
     void Stop();
+
+    /**
+     * @brief Checks if there are any jobs pending in the thread pool.
+     * @return True if there are pending jobs, false otherwise.
+     */
     bool busy();
-    std::vector<T> return_values;
+
+    std::vector<T> return_values; /**< Vector to store return values from completed jobs. */
+
 private:
+    /**
+     * @brief Function that represents the main loop for each worker thread.
+     */
     void ThreadLoop();
 
-    bool should_terminate = false;           
-    std::mutex queue_mutex;
-    std::mutex vector_mutex;                  
-    std::condition_variable mutex_condition; 
-    std::vector<std::thread> threads;
-    std::queue<std::function<T()>> jobs;
+    bool should_terminate = false; /**< Flag to signal termination of the thread pool. */
+    std::mutex queue_mutex; /**< Mutex to protect access to the job queue. */
+    std::mutex vector_mutex; /**< Mutex to protect access to the return values vector. */
+    std::condition_variable mutex_condition; /**< Condition variable for synchronization. */
+    std::vector<std::thread> threads; /**< Collection of worker threads. */
+    std::queue<std::function<T()>> jobs; /**< Queue for storing jobs. */
 };
 
 template<typename T>

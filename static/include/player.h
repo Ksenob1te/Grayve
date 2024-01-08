@@ -1,5 +1,6 @@
 #ifndef GRAYVE_PLAYER_H
 #define GRAYVE_PLAYER_H
+
 #include "character.h"
 #define SPRINT_COOLDOWN 50
 #define SPRINT_LENGTH 20
@@ -7,18 +8,51 @@
 
 class Player: public Character {
 private:
-    bool shoot_action{}, sprint_action{};
-    int sprint_cooldown{}, sprint_length{};
+    bool shoot_action{}; /**< Flag for shooting action. */
+    bool sprint_action{}; /**< Flag for sprint action. */
+    int sprint_cooldown{}; /**< Cooldown for sprint action. */
+    int sprint_length{}; /**< Length of sprint. */
 
 public:
+    /**
+     * @brief Gets the entity type of the Player.
+     * @return The entity type of the Player.
+     */
     [[nodiscard]] EntityType get_entity_type() const override;
-    void die() override;
-    void receive_damage(int amount) override;
-    void update() override;
-    explicit Player(field::Map *map) : Character(map, 100) {};
 
-    void set_shoot_action(bool state) {this->shoot_action = state;}
-    void set_sprint(bool state) {this->sprint_action = state;}
+    /**
+     * @brief Handles the death of the Player.
+     */
+    void die() override;
+
+    /**
+     * @brief Receives damage by the Player.
+     * @param amount The amount of damage received.
+     */
+    void receive_damage(int amount) override;
+
+    /**
+     * @brief Updates the state of the Player.
+     */
+    void update() override;
+
+    /**
+     * @brief Parameterized constructor for Player class.
+     * @param map The map on which the Player exists.
+     */
+    explicit Player(field::Map* map) : Character(map, 100) {};
+
+    /**
+     * @brief Sets the shoot action for the Player.
+     * @param state The state of the shoot action.
+     */
+    void set_shoot_action(bool state) { this->shoot_action = state; }
+
+    /**
+     * @brief Sets the sprint action for the Player.
+     * @param state The state of the sprint action.
+     */
+    void set_sprint(bool state) { this->sprint_action = state; }
 };
 
 #endif //GRAYVE_PLAYER_H
