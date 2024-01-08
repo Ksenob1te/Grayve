@@ -6,4 +6,6 @@ add_library(static_tests OBJECT
         chunk_test.cpp
         map_tests.cpp
         collider_test.cpp
+        player_test.cpp
+        vector_test.cpp
 )

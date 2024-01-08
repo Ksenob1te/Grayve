@@ -1,5 +1,6 @@
 #include "player.h"
 
+
 [[nodiscard]] EntityType Player::get_entity_type() const {
     return EntityType::PLAYER;
 }

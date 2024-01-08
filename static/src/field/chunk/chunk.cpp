@@ -94,8 +94,8 @@ field::Chunk& field::Chunk::operator=(const Chunk &other) {
     if (this == &other) return *this;
     this->right_top = other.right_top;
     this->left_bottom = other.left_bottom;
-    if (other.room == nullptr)
-        this->room = nullptr;
+    if (other.room == NULL)
+        this->room = NULL;
     else {
         this->room = new Block *[field::CHUNK_SIZE];
         for (int i = 0; i < field::CHUNK_SIZE; i++) {

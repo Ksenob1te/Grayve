@@ -426,7 +426,7 @@ namespace tmp {
          */
         void clear() {
             for (T *ptr = this->arr; ptr != this->arr + this->size; ptr++)
-                ptr->~Type();
+                ptr->~T();
             this->size = 0;
         }
 

@@ -118,6 +118,14 @@ Entity::Entity(field::Map *map) : globalMap(map) {
         map->add_entity(this);
 }
 
+Entity::Entity(field::Map *map, int chunk_x, int chunk_y) : globalMap(map) {
+    this->collider = ColliderBox(&this->coordinates, 0.5);
+    if (map)
+        map->add_entity(this);
+    this->chunk_x = chunk_x;
+    this->chunk_y = chunk_y;
+}
+
 ColliderBox &Entity::get_collider() {
     return this->collider;
 }

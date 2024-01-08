@@ -31,6 +31,7 @@ protected:
     ColliderBox collider; /**< Collider box for collision detection. */
     bool lock_dx{}, lock_dz{}; /**< Flags to lock movement in X and Z axes. */
     field::Map* globalMap; /**< Pointer to the global map. */
+    int chunk_x{}, chunk_y{};
 
 public:
     /**
@@ -44,6 +45,9 @@ public:
      * @param map The map on which the Entity exists.
      */
     explicit Entity(field::Map* map);
+
+
+    Entity(field::Map* map, int chunk_x, int chunk_y);
 
     /**
      * @brief Destructor for Entity class.
@@ -113,6 +117,9 @@ public:
      * @return Reference to the collider box.
      */
     ColliderBox& get_collider();
+
+    [[nodiscard]] int get_chunk_x() const {return this->chunk_x;}
+    [[nodiscard]] int get_chunk_y() const {return this->chunk_y;}
 
     // Setter methods
 

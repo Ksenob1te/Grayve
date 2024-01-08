@@ -48,6 +48,7 @@ Game::Game() {
 
 void Game::update() {
     this->globalMap.update();
+
 }
 
 void Game::render() {
