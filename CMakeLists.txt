@@ -21,6 +21,8 @@ if(NOT OPENGL_FOUND)
     message(ERROR "OPENGL not found!")
 endif(NOT OPENGL_FOUND)
 
+
+link_directories(${path_to_SOIL})
 #target_link_libraries(Grayve sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
 
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
@@ -36,13 +38,14 @@ add_subdirectory(graphic)
 add_subdirectory(game)
 
 target_link_libraries(camera entity)
+target_link_libraries(draw_entity texture_manager)
 target_link_libraries(game_lib entity camera chunk map draw_map draw_entity)
 
-set(MY_INCLUDE_LIBS ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map)
+set(MY_INCLUDE_LIBS soil ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map)
 
 target_link_libraries(${PROJECT_NAME} ${MY_INCLUDE_LIBS})
 target_link_libraries(TEST static_tests ${MY_INCLUDE_LIBS} )
 add_compile_options(--coverage)
 add_link_options(--coverage)
 
-
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})

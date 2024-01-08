@@ -3,6 +3,7 @@
 #include "GL/freeglut.h"
 #include <GL/gl.h>
 #include "GL/glext.h"
+#include "texture_manager.h"
 
 Game globalGame = Game();
 
@@ -132,4 +133,6 @@ void Game::setupEngine() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    texture_manager = new TextureManager();
 }
