@@ -14,7 +14,6 @@ void Player::update(){
     if (this->getZ() > field::CHUNK_SIZE) {this->chunk_x++; this->setCoordinates(Point(this->getX(), 0));}
     if (this->getX() < 0) {this->chunk_y--; this->setCoordinates(Point(field::CHUNK_SIZE, this->getZ()));}
     if (this->getX() > field::CHUNK_SIZE) {this->chunk_y++; this->setCoordinates(Point(0, this->getZ()));}
-    std::cout << this->getX() << " " << this->getZ() << std::endl;
 
     if (this->sprint_length) this->sprint_length--;
     if (this->sprint_cooldown) this->sprint_cooldown--;
