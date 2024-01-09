@@ -124,7 +124,7 @@ void Game::setupEngine() {
     glutKeyboardUpFunc(controller::normalKeyReset);
     glutMouseFunc(controller::mouseEvent);
 
-    glClearColor(0, 0, 0, 1.0);
+    glClearColor(0, 0, 0, 0.0);
     glColor3f(1.0, 1.0, 1.0);
     glEnable(GL_DEPTH_TEST);
     glutSetOption(GLUT_MULTISAMPLE, 8);
@@ -136,5 +136,9 @@ void Game::setupEngine() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glAlphaFunc(GL_GREATER, 0.5);
+    glEnable(GL_ALPHA_TEST);
     texture_manager = new TextureManager();
 }

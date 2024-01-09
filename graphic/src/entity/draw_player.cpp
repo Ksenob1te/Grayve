@@ -9,18 +9,21 @@ void draw::draw_player(const Entity &player, double interpolation) {
 
     double left_x = player.get_interpolatedX(interpolation) - cos(player.getPhi() + M_PI_2) * 0.3;
     double left_z = player.get_interpolatedZ(interpolation) - sin(player.getPhi() + M_PI_2) * 0.3;
-    //glColor3f(0.0, 0.0, 0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);
+
     glBindTexture(GL_TEXTURE_2D, texture_manager->getTexture("player"));
     glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f);	glVertex3d(left_x, 0, left_z);
-    glTexCoord2f(1.0f, 0.0f);	glVertex3d(left_x, 1, left_z);
-    glTexCoord2f(1.0f, 1.0f);	glVertex3d(right_x, 1, right_z);
-    glTexCoord2f(0.0f, 1.0f);	glVertex3d(right_x, 0, right_z);
+    int animation = 1;
+
+    glTexCoord2f((1.0f/8.0f) * (animation), 1.0f);	glVertex3d(left_x, 0, left_z);
+    glTexCoord2f((1.0f/8.0f) * (animation), 0.0f);	glVertex3d(left_x, 1.25, left_z);
+    glTexCoord2f((1.0f/8.0f) * (animation + 1), 0.0f);	glVertex3d(right_x, 1.25, right_z);
+    glTexCoord2f((1.0f/8.0f) * (animation + 1), 1.0f);	glVertex3d(right_x, 0, right_z);
+
     glEnd();
     glDisable(GL_TEXTURE_2D);
-
 
 //    glColor3f(1, 1, 1);
 //    glPushMatrix();

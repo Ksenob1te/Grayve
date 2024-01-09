@@ -10,6 +10,7 @@ class TextureManager {
     public:
     TextureManager();
     void loadTexture(std::string path, std::string name);
+    void bindTexture(std::string name);
     GLuint getTexture(std::string name);
 };
 extern TextureManager *texture_manager;
