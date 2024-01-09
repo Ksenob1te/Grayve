@@ -34,12 +34,12 @@ Game::Game() {
     this->globalMap.print_map();
     this->globalMap.print_starter();
 
-    this->mainChar = new Player(&this->globalMap);
+    this->mainChar = new Player(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
     this->mainChar->setCoordinates(Point(16.5, 16.5));
     this->mainChar->setHeight(0);
     this->mainChar->setSpeed(2./20);
 
-    auto enemy = new Enemy(&this->globalMap);
+    auto enemy = new Enemy(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
     enemy->setCoordinates(Point(10.5, 10.5));
     enemy->setSpeed(0.05);
     enemy->set_follow(this->mainChar);
@@ -56,8 +56,10 @@ void Game::render() {
     controller::globalController.process_player(*mainChar);
     controller::globalController.process_camera(globalCam);
     globalCam.update(interpolation);
-    draw::draw_entities(globalMap, interpolation);
-    draw::draw_map(globalMap, globalCam);
+    int chunk_x = this->mainChar->get_chunk_x();
+    int chunk_y = this->mainChar->get_chunk_y();
+    draw::draw_entities(globalMap, interpolation, chunk_x, chunk_y);
+    draw::draw_map(globalMap, globalCam, chunk_x, chunk_y);
 }
 
 void Game::tickrateManager() {

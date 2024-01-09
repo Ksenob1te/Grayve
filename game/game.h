@@ -18,7 +18,7 @@ protected:
     field::Map globalMap;  ///< The game's global map.
     Player* mainChar;      ///< The main player character.
     Camera globalCam;       ///< The game's global camera.
-    double interpolation;  ///< Interpolation value for smooth rendering.
+    double interpolation{};  ///< Interpolation value for smooth rendering.
 
 public:
     /**

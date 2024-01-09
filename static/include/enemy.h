@@ -1,6 +1,8 @@
 #ifndef GRAYVE_ENEMY_H
 #define GRAYVE_ENEMY_H
 
+#define SHOOT_COOLDOWN 10
+
 #include "character.h"
 
 /**
@@ -9,7 +11,7 @@
  */
 class Enemy : public Character {
 private:
-    Entity* follow; /**< Entity that the enemy is following. */
+    Entity* follow{}; /**< Entity that the enemy is following. */
 
 public:
     /**
@@ -21,13 +23,13 @@ public:
     /**
      * @brief Handles the death of the Enemy.
      */
-    void die() override {};
+    void die() override {Character::die();};
 
     /**
      * @brief Receives damage by the Enemy.
      * @param amount The amount of damage received.
      */
-    void receive_damage(int amount) override {};
+    void receive_damage(int amount) override {Character::receive_damage(amount);};
 
     /**
      * @brief Updates the state of the Enemy.
@@ -45,6 +47,8 @@ public:
      * @param map The map on which the Enemy exists.
      */
     explicit Enemy(field::Map* map) : Character(map, 5) {};
+
+    Enemy(field::Map* map, int chunk_x, int chunk_y) : Character(map, 5, chunk_x, chunk_y) {};
 };
 
 #endif //GRAYVE_ENEMY_H

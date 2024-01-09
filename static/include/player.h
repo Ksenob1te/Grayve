@@ -42,6 +42,8 @@ public:
      */
     explicit Player(field::Map* map) : Character(map, 100) {};
 
+    Player(field::Map* map, int chunk_x, int chunk_y) : Character(map, 100, chunk_x, chunk_y) {};
+
     /**
      * @brief Sets the shoot action for the Player.
      * @param state The state of the shoot action.

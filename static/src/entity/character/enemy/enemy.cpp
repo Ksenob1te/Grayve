@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "cmath"
+#include "iostream"
 
 [[nodiscard]] EntityType Enemy::get_entity_type() const {
     return EntityType::ENEMY;
@@ -21,7 +22,11 @@ void Enemy::update() {
         this->setMoveForward(true);
 
         if (sqrt(dx * dx + dz * dz) <= 5)
-            this->shoot();
+            if (this->shoot_cooldown == 0) {
+                std::cout << this->health_points << std::endl;
+                this->shoot();
+                this->shoot_cooldown = SHOOT_COOLDOWN;
+            }
         if (sqrt(dx * dx + dz * dz) <= 4)
             this->setMoveForward(false);
 

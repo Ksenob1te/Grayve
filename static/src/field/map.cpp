@@ -163,3 +163,9 @@ void field::Map::remove_entity(Entity *entity) {
         if(ent == entity) ent = nullptr;
     }
 }
+
+const Entity& field::Map::get_player() const {
+    for (auto ent : this->entity_set)
+        if (ent != nullptr && ent->get_entity_type() == EntityType::PLAYER)
+            return *ent;
+}

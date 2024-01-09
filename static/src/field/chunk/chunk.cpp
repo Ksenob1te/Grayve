@@ -57,7 +57,7 @@ void field::Chunk::generate_room(bool north, bool east, bool south, bool west)  
 void field::Chunk::print_chunk() const {
     for (int i = 0; i < field::CHUNK_SIZE; ++i) {
         for (int j = 0; j < field::CHUNK_SIZE; ++j) {
-            room[i][j].print_block();
+            room[j][i].print_block();
         }
         std::cout << std::endl;
     }

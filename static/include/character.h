@@ -2,7 +2,7 @@
 #define GRAYVE_CHARACTER_H
 
 #include "entity.h"
-#define SHOOT_COOLDOWN 0
+#define SHOOT_COOLDOWN 10
 
 /**
  * @class Character
@@ -10,18 +10,16 @@
  * @details This class inherits from Entity and serves as a base for various character types.
  */
 class Character : public Entity {
-private:
-    int health_points; /**< The health points of the character. */
-
 protected:
+    int health_points; /**< The health points of the character. */
     int shoot_cooldown{}; /**< Cooldown for shooting abilities. */
 
 public:
     /**
-     * @brief Pure virtual function representing the death of the character.
+     * @brief Virtual function representing the death of the character.
      * @details This function must be implemented in derived classes to handle character death.
      */
-    virtual void die() = 0;
+    virtual void die();
 
     /**
      * @brief Pure virtual function to receive damage by the character.
@@ -44,7 +42,7 @@ public:
     /**
      * @brief Default constructor for Character class.
      */
-    Character() : Character(nullptr, 0) {}
+    Character() : Character(nullptr, 10) {}
 
     /**
      * @brief Parameterized constructor for Character class.
@@ -64,6 +62,8 @@ public:
      * @param health_points The initial health points of the character.
      */
     Character(field::Map* map, int health_points) : Entity(map), health_points(health_points) {}
+
+    Character(field::Map* map, int health_points, int chunk_x, int chunk_y) : Entity(map, chunk_x, chunk_y), health_points(health_points) {}
 };
 
 #endif //GRAYVE_CHARACTER_H

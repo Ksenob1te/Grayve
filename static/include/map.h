@@ -124,6 +124,8 @@ namespace field {
          * @param entity Pointer to the entity to be removed.
          */
         void remove_entity(Entity* entity);
+
+        [[nodiscard]] const Entity& get_player() const;
     };
 }
 

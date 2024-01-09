@@ -129,6 +129,10 @@ public:
      */
     void setCoordinates(Point point);
 
+    void set_chunk_x(int chunk_x) { this->chunk_x = chunk_x; };
+
+    void set_chunk_y(int chunk_y) { this->chunk_x = chunk_y; };
+
     /**
      * @brief Sets the height of the entity.
      * @param new_height The new height value.
@@ -199,6 +203,8 @@ public:
      * @return True if the entity is moving, else false.
      */
     [[nodiscard]] bool isMoving() const;
+
+    [[nodiscard]] bool isSameChunk(Entity& other) const;
 };
 
 #endif //GRAYVE_ENTITY_H

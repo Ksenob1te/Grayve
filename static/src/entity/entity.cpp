@@ -43,7 +43,7 @@ void Entity::update_position() {
 bool Entity::is_wall_colliding(double dest_x, double dest_z) {
     double current_x = this->coordinates.getX();
     double current_z = this->coordinates.getZ();
-    const field::Chunk &current_chunk = this->globalMap->get_starter();
+    const field::Chunk &current_chunk = this->globalMap->get_chunk(this->chunk_x, this->chunk_y);
     const Block blocks[9] = {current_chunk.get_block(current_x + 1, current_z),
                              current_chunk.get_block(current_x, current_z + 1),
                              current_chunk.get_block(current_x - 1, current_z),
@@ -128,4 +128,8 @@ Entity::Entity(field::Map *map, int chunk_x, int chunk_y) : globalMap(map) {
 
 ColliderBox &Entity::get_collider() {
     return this->collider;
+}
+
+bool Entity::isSameChunk(Entity &other) const {
+    return (this->chunk_x == other.chunk_x) && (this->chunk_y == other.chunk_y);
 }

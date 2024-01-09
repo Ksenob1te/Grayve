@@ -17,6 +17,7 @@ void Projectile::update() {
     for (auto *entity: this->globalMap->entity_set) {
         if (this == entity) continue;
         if (entity == nullptr) continue;
+        if (!this->isSameChunk(*entity)) continue;
         if (this->collider.is_intersect(entity->get_collider())) {
             collided = entity;
             break;
@@ -31,14 +32,14 @@ void Projectile::update() {
             return;
         case EntityType::PLAYER:
             if (this->creator_type == EntityType::ENEMY) {
-                Player *plr = static_cast<Player*>(collided);
+                auto *plr = dynamic_cast<Player*>(collided);
                 plr->receive_damage(this->damage);
                 delete this;
             }
             break;
         case EntityType::ENEMY:
             if (this->creator_type == EntityType::PLAYER) {
-                Enemy *enm = static_cast<Enemy*>(collided);
+                auto *enm = dynamic_cast<Enemy*>(collided);
                 enm->receive_damage(this->damage);
                 delete this;
             }

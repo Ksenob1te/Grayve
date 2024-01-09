@@ -26,14 +26,18 @@ public:
      * @param point The starting Point of the Projectile.
      * @param creator_type The type of entity that created the Projectile.
      */
-    Projectile(field::Map *map, double phi, Point point, EntityType creator_type)
-            : Entity(map), life_time(0), creator_type(creator_type), damage(1) {
+
+    Projectile(field::Map *map, double phi, Point point, EntityType creator_type, int chunk_x, int chunk_y)
+            : Entity(map, chunk_x, chunk_y), life_time(0), creator_type(creator_type), damage(1) {
         this->setPhi(phi);
         this->setCoordinates(point);
         this->collider.set_radius(0.1);
         this->setMoveForward(true);
         this->setSpeed(8.0 / 20.0);
     }
+
+    Projectile(field::Map *map, double phi, Point point, EntityType creator_type)
+            : Projectile(map, phi, point, creator_type, 0, 0) {}
 
     /**
      * @brief Default constructor for Projectile class.
