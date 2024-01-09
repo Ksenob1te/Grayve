@@ -5,6 +5,10 @@
     return EntityType::PLAYER;
 }
 
+std::string Player::get_entity_name() const {
+    return "player";
+}
+
 void Player::die() {};
 void Player::receive_damage(int amount) {};
 

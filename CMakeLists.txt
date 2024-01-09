@@ -36,12 +36,20 @@ set_target_properties(TEST PROPERTIES LINKER_LANGUAGE CXX)
 add_subdirectory(static)
 add_subdirectory(graphic)
 add_subdirectory(game)
+add_subdirectory(dynamiclib)
+
+message(${DYNAMIC_LIBS})
 
 target_link_libraries(camera entity)
 target_link_libraries(draw_entity texture_manager)
 target_link_libraries(game_lib entity camera chunk map draw_map draw_entity)
 
-set(MY_INCLUDE_LIBS soil ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map)
+foreach (loopVAR IN LISTS ${DYNAMIC_LIBS})
+    target_link_libraries(loopVAR enemy)
+    target_link_libraries(game_lib loopVAR )
+endforeach()
+
+set(MY_INCLUDE_LIBS soil ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES} game_lib draw_map ${DYNAMIC_LIBS})
 
 target_link_libraries(${PROJECT_NAME} ${MY_INCLUDE_LIBS})
 target_link_libraries(TEST static_tests ${MY_INCLUDE_LIBS} )

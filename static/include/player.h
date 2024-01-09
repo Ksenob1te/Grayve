@@ -20,6 +20,8 @@ public:
      */
     [[nodiscard]] EntityType get_entity_type() const override;
 
+    [[nodiscard]] std::string get_entity_name() const override;
+
     /**
      * @brief Handles the death of the Player.
      */

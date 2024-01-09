@@ -2,7 +2,6 @@
 #define GRAYVE_ENEMY_H
 
 #define SHOOT_COOLDOWN 10
-
 #include "character.h"
 
 /**
@@ -10,7 +9,7 @@
  * @brief Represents an enemy character within the game.
  */
 class Enemy : public Character {
-private:
+protected:
     Entity* follow{}; /**< Entity that the enemy is following. */
 
 public:
@@ -19,6 +18,8 @@ public:
      * @return The entity type of the Enemy.
      */
     [[nodiscard]] EntityType get_entity_type() const override;
+
+    [[nodiscard]] std::string get_entity_name() const override;
 
     /**
      * @brief Handles the death of the Enemy.
@@ -48,7 +49,11 @@ public:
      */
     explicit Enemy(field::Map* map) : Character(map, 5) {};
 
+    Enemy(field::Map* map, int health_points) : Character(map, health_points) {};
+
     Enemy(field::Map* map, int chunk_x, int chunk_y) : Character(map, 5, chunk_x, chunk_y) {};
+
+    Enemy(field::Map* map, int health_points, int chunk_x, int chunk_y) : Character(map, health_points, chunk_x, chunk_y) {};
 };
 
 #endif //GRAYVE_ENEMY_H

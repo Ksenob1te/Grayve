@@ -6,6 +6,10 @@ EntityType Projectile::get_entity_type() const {
     return EntityType::PROJECTILE;
 }
 
+std::string Projectile::get_entity_name() const {
+    return "projectile";
+}
+
 void Projectile::update() {
     this->update_position();
     this->life_time++;

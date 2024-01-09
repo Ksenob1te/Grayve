@@ -19,6 +19,8 @@ public:
      */
     [[nodiscard]] EntityType get_entity_type() const override;
 
+    [[nodiscard]] std::string get_entity_name() const override;
+
     /**
      * @brief Parameterized constructor for Projectile class.
      * @param map The map on which the Projectile exists.

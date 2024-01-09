@@ -6,6 +6,10 @@
     return EntityType::ENEMY;
 }
 
+std::string Enemy::get_entity_name() const {
+    return "enemy";
+}
+
 void Enemy::update() {
     if (this->follow) {
         double dx = this->follow->getX() - this->getX();

@@ -4,7 +4,7 @@
 #include "camera.h"
 #include "controller.h"
 #include "player.h"
-#include "enemy.h"
+#include "../dynamiclib/creeper.h"
 #define TICK_RATE 50
 #define TICK_TIMER (1000./TICK_RATE)
 #define WINDOW_WIDTH 1280

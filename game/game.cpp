@@ -39,7 +39,7 @@ Game::Game() {
     this->mainChar->setHeight(0);
     this->mainChar->setSpeed(2./20);
 
-    auto enemy = new Enemy(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
+    auto enemy = new Creeper(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
     enemy->setCoordinates(Point(10.5, 10.5));
     enemy->setSpeed(0.05);
     enemy->set_follow(this->mainChar);

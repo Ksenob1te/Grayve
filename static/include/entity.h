@@ -66,6 +66,14 @@ public:
      */
     [[nodiscard]] virtual EntityType get_entity_type() const = 0;
 
+
+    /**
+     * @brief Gets the entity name.
+     * @return The name of entity.
+     */
+    [[nodiscard]] virtual std::string get_entity_name() const {return "default";};
+
+
     // Getter methods
 
     /**
@@ -203,6 +211,11 @@ public:
      * @return True if the entity is moving, else false.
      */
     [[nodiscard]] bool isMoving() const;
+
+    [[nodiscard]] bool isMovingLeft() const {return move_left && (!move_right);}
+    [[nodiscard]] bool isMovingRight() const {return move_right && (!move_left);}
+    [[nodiscard]] bool isMovingForward() const {return move_forward && (!move_backward);}
+    [[nodiscard]] bool isMovingBackward() const {return move_backward && (!move_forward);}
 
     [[nodiscard]] bool isSameChunk(Entity& other) const;
 };
