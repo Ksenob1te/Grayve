@@ -23,11 +23,11 @@ TEST_CASE_METHOD(MapFixture, "Map updates") {
 
     MockEntity mock_entity(&map);
     REQUIRE(map.new_entity.size() == 1);
-    map.update();
+    map.update(5, 5);
     REQUIRE(map.entity_set.size() == 1);
 
     map.remove_entity(&mock_entity);
-    map.update();
+    map.update(5, 5);
     REQUIRE(map.entity_set.empty());
 
 }

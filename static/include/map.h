@@ -91,6 +91,8 @@ namespace field {
          */
         void generate_room_map(int numRooms);
 
+        void generate_all_enemies(Entity* player);
+
         /**
          * @brief Prints the starting chunk.
          */
@@ -111,7 +113,7 @@ namespace field {
         /**
          * @brief Updates the map state.
          */
-        void update();
+        void update(int chunk_x, int chunk_y);
 
         /**
          * @brief Adds an entity to the map.

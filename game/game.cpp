@@ -39,16 +39,18 @@ Game::Game() {
     this->mainChar->setHeight(0);
     this->mainChar->setSpeed(2./20);
 
-    auto enemy = new Creeper(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
-    enemy->setCoordinates(Point(10.5, 10.5));
-    enemy->setSpeed(0.05);
-    enemy->set_follow(this->mainChar);
+    this->globalMap.generate_all_enemies(this->mainChar);
+
+//    auto enemy = new Creeper(&this->globalMap, globalMap.get_starter_x(), globalMap.get_starter_y());
+//    enemy->setCoordinates(Point(10.5, 10.5));
+//    enemy->setSpeed(0.05);
+//    enemy->set_follow(this->mainChar);
 
     this->globalCam.follow = this->mainChar;
 }
 
 void Game::update() {
-    this->globalMap.update();
+    this->globalMap.update(this->mainChar->get_chunk_x(), this->mainChar->get_chunk_y());
 
 }
 

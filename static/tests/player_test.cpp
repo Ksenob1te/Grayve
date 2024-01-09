@@ -2,10 +2,9 @@
 #include "player.h" // Include the header for Player class
 
 TEST_CASE("Player class tests", "Player") {
-    field::Map map(10);
-    map.generate_room_map(10);
-
     SECTION("Inherited functionality from Character") {
+        field::Map map(10);
+        map.generate_room_map(10);
         Player player(&map);
 
         REQUIRE(player.get_entity_type() == EntityType::PLAYER);
@@ -21,6 +20,8 @@ TEST_CASE("Player class tests", "Player") {
     }
 
     SECTION("Inherited functionality from Entity") {
+        field::Map map(10);
+        map.generate_room_map(10);
         Player player(&map);
 
         REQUIRE(player.get_collider().is_intersect(Block(Tile::Wall, Point(0, 0), Point(1, 1))) == true);

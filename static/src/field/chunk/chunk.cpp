@@ -27,7 +27,6 @@ void field::Chunk::generate_room(bool north, bool east, bool south, bool west)  
 
     this->left_bottom = Point(min_width - 1, min_height - 1);
     this->right_top = Point(min_width + selected_width, min_height + selected_height);
-
     std::uniform_int_distribution<int> randomizer(0, 100);
     for (unsigned int y = min_height; y < min_height + selected_height; y++) {
         for (unsigned int x = min_width; x < min_width + selected_width; x++) {
@@ -39,6 +38,7 @@ void field::Chunk::generate_room(bool north, bool east, bool south, bool west)  
                 this->room[y][x].set_block_type(Tile::Floor);
         }
     }
+
 
     if (north)
         for (int i = 0; i <= (field::CHUNK_SIZE / 2); i++)

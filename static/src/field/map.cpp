@@ -6,6 +6,9 @@
 #include "thread_pool.h"
 #include <chrono>
 
+#include "enemy.h"
+#include "creeper.h"
+
 
 field::Map::Map(int map_size) {
     this->starter_x = 0;
@@ -100,9 +103,10 @@ void field::Map::generate_room_map(int numRooms) {
     }
     tp.Start();
     while(tp.busy()) std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    for (auto &conn : tp.return_values)
-        rooms[conn.y].push_back(conn);
     tp.Stop();
+    for (auto &conn : tp.return_values) {
+        rooms[conn.y].push_back(conn);
+    }
 }
 
 void field::Map::print_chunk(int x, int y) const {
@@ -142,9 +146,9 @@ const field::Chunk& field::Map::get_starter() const {
     return get_chunk(this->starter_x, this->starter_y);
 }
 
-void field::Map::update() {
+void field::Map::update(int chunk_x, int chunk_y) {
     for (auto ent = this->entity_set.begin(); ent != this->entity_set.end(); ++ent)
-        if (*ent != nullptr)
+        if (*ent != nullptr && (*ent)->get_chunk_x() == chunk_x && (*ent)->get_chunk_y() == chunk_y)
             (*ent)->update();
     this->entity_set.erase(std::remove_if(this->entity_set.begin(),this->entity_set.end(),
                     [](auto x){ return x == nullptr; }), this->entity_set.end());
@@ -168,4 +172,41 @@ const Entity& field::Map::get_player() const {
     for (auto ent : this->entity_set)
         if (ent != nullptr && ent->get_entity_type() == EntityType::PLAYER)
             return *ent;
+}
+
+void field::Map::generate_all_enemies(Entity* player) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    for (auto& y: this->rooms) {
+        for (auto& current_connector: y) {
+            std::uniform_int_distribution<unsigned int> height_random(
+                    (unsigned) current_connector.room.left_bottom.getZ() + 1,
+                    (unsigned) current_connector.room.right_top.getZ() - 1
+            );
+            std::uniform_int_distribution<unsigned int> width_random(
+                    (unsigned) current_connector.room.left_bottom.getX() + 1,
+                    (unsigned) current_connector.room.right_top.getX() - 1
+            );
+            std::uniform_int_distribution<int> enemyType(0, 1);
+            int entity_count = 8;
+            for (int k = 0; k < entity_count; k++) {
+                unsigned curr_height = height_random(gen);
+                unsigned curr_width = width_random(gen);
+                if (current_connector.room.room[curr_height][curr_width].get_block_type() == Tile::Floor) {
+                    if (enemyType(gen) == 1) {
+                        auto *creeper = new Creeper(this, current_connector.x, current_connector.y);
+                        creeper->setCoordinates(Point(curr_height + 0.5, curr_width + 0.5));
+                        creeper->setSpeed(0.05);
+                        creeper->set_follow(player);
+                    }
+                    else {
+                        auto *enemy = new Enemy(this, current_connector.x, current_connector.y);
+                        enemy->setCoordinates(Point(curr_height + 0.5, curr_width + 0.5));
+                        enemy->setSpeed(0.05);
+                        enemy->set_follow(player);
+                    }
+                }
+            }
+        }
+    }
 }

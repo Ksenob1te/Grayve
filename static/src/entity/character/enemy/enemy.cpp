@@ -27,7 +27,7 @@ void Enemy::update() {
 
         if (sqrt(dx * dx + dz * dz) <= 5)
             if (this->shoot_cooldown == 0) {
-                std::cout << this->health_points << std::endl;
+//                std::cout << this->health_points << std::endl;
                 this->shoot();
                 this->shoot_cooldown = SHOOT_COOLDOWN;
             }

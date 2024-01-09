@@ -14,12 +14,12 @@ void draw::draw_enemy(const Entity &enemy, double interpolation) {
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glEnable(GL_TEXTURE_2D);
 
-    glBindTexture(GL_TEXTURE_2D, texture_manager->getTexture("creeper"));
+    glBindTexture(GL_TEXTURE_2D, texture_manager->getTexture(enemy.get_entity_name()));
     glBegin(GL_QUADS);
-    glTexCoord2f((1.0f/8.0f) * (0), 0.99f);	glVertex3d(left_x, 0, left_z);
-    glTexCoord2f((1.0f/8.0f) * (0), 0.0f);	glVertex3d(left_x, 1.25, left_z);
-    glTexCoord2f((1.0f/8.0f) * (0 + 1), 0.0f);	glVertex3d(right_x, 1.25, right_z);
-    glTexCoord2f((1.0f/8.0f) * (0 + 1), 0.99f);	glVertex3d(right_x, 0, right_z);
+    glTexCoord2f((1.0f/8.0f) * (5), 0.99f);	glVertex3d(left_x, 0, left_z);
+    glTexCoord2f((1.0f/8.0f) * (5), 0.0f);	glVertex3d(left_x, 1.25, left_z);
+    glTexCoord2f((1.0f/8.0f) * (5 + 1), 0.0f);	glVertex3d(right_x, 1.25, right_z);
+    glTexCoord2f((1.0f/8.0f) * (5 + 1), 0.99f);	glVertex3d(right_x, 0, right_z);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, 0);

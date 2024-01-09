@@ -44,3 +44,5 @@ void Creeper::update() {
     }
     Character::update();
 }
+
+static Creeper creeper(nullptr);
