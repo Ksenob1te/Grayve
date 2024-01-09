@@ -32,8 +32,10 @@ void Creeper::update() {
         this->setMoveForward(true);
 
         if (sqrt(dx * dx + dz * dz) <= 3) {
-            if (this->explosion_timer == 0)
+            if (this->explosion_timer == 0) {
                 this->die();
+                return;
+            }
             explosion_timer--;
         } else
             explosion_timer = EXPLOSION_TIMER;

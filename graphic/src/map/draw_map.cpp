@@ -53,6 +53,7 @@ void draw::draw_map(const field::Map &map, const Camera &camera, int chunk_x, in
 }
 
 void draw::draw_entities(const field::Map &map, double interpolation, int chunk_x, int chunk_y) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(const Entity* entity : map.entity_set) {
         const Entity &current_entity = *entity;
         if (entity->get_chunk_x() == chunk_x && entity->get_chunk_y() == chunk_y)

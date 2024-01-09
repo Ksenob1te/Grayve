@@ -9,9 +9,6 @@ void draw::draw_player(const Entity &player, double interpolation) {
 
     double left_x = player.get_interpolatedX(interpolation) - cos(player.getPhi() + M_PI_2) * 0.35;
     double left_z = player.get_interpolatedZ(interpolation) - sin(player.getPhi() + M_PI_2) * 0.35;
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glEnable(GL_TEXTURE_2D);
 
     float animation = 1;
     if (player.isMovingForward())
@@ -31,6 +28,9 @@ void draw::draw_player(const Entity &player, double interpolation) {
     if (player.isMovingBackward() && player.isMovingRight())
         animation = 4;
 
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_TEXTURE_2D);
+
     glBindTexture(GL_TEXTURE_2D, texture_manager->getTexture("player"));
     glBegin(GL_QUADS);
 
@@ -43,6 +43,8 @@ void draw::draw_player(const Entity &player, double interpolation) {
     glBindTexture(GL_TEXTURE_2D, 0);
     glDisable(GL_TEXTURE_2D);
 
+}
+
 //    glColor3f(1, 1, 1);
 //    glPushMatrix();
 //    glTranslated(
@@ -52,4 +54,3 @@ void draw::draw_player(const Entity &player, double interpolation) {
 //    );
 //    glutSolidSphere(0.3, 30, 30);
 //    glPopMatrix();
-}

@@ -11,7 +11,7 @@ class TextureManager {
     TextureManager();
     void loadTexture(std::string path, std::string name);
     void bindTexture(std::string name);
-    GLuint getTexture(std::string name);
+    GLuint getTexture(const std::string& name);
 };
 extern TextureManager *texture_manager;
 #endif //GRAYVE_TEXTURE_MANAGER_H

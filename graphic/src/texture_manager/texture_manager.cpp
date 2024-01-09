@@ -24,7 +24,7 @@ void TextureManager::loadTexture(std::string path, std::string name){
     this->textures[name]= texture; 
 }
 
-GLuint TextureManager::getTexture(std::string name){
+GLuint TextureManager::getTexture(const std::string& name){
     return this->textures[name];
 }
 
@@ -34,6 +34,7 @@ void TextureManager::bindTexture(std::string name){
 TextureManager::TextureManager(){
     loadTexture("assets/sprites/mage.png", "enemy");
     loadTexture("assets/sprites/player.png", "player");
+    loadTexture("assets/sprites/creeper.png", "creeper");
 }
 
 
